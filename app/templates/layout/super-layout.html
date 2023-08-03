@@ -10,7 +10,8 @@
     <link rel="icon" href="{{ url_for('static', filename='images/brt-logo.png') }}">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap"
+          rel="stylesheet">
 
     <!-- Template CSS Files -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
@@ -29,7 +30,7 @@
 </head>
 <body class="section-bg">
 <!-- start cssload-loader -->
-{% include "layout/preloader.html"  %}
+{% include "layout/preloader.html" %}
 
 
 <!-- ================================
@@ -50,33 +51,66 @@
         </div>
         <div class="sidebar-menu-wrap">
             <ul class="sidebar-menu toggle-menu list-items">
-                <li class="page-active"><a href="/admin/overview"><i class="la la-dashboard mr-2"></i>Overview</a></li>
-                <li><a href="/admin/reservations"><i class="la la-shopping-cart mr-2 text-color"></i>Reservations</a></li>
-                <li><a href="/admin/reservations"><i class="la la-shopping-cart mr-2 text-color"></i>Bus</a></li>
-                <li><a href="/admin/reservations"><i class="la la-shopping-cart mr-2 text-color"></i>Routes</a></li>
-                <li><a href="/admin/reservations"><i class="la la-shopping-cart mr-2 text-color"></i>Ticket</a></li>
-                <li><a href="/admin/reservations"><i class="la la-shopping-cart mr-2 text-color"></i>Transactions</a></li>
-                <li>
+                <li class="{% if route == "/admin/overview" %}page-active {% endif %} "><a href="/admin/overview"><i
+                        class="la la-dashboard mr-2"></i>Overview</a></li>
+                <li class="{% if route == "/admin/reservations/list" or route == "/admin/reservations/search"  %}page-active active{% endif %} ">
                     <span class="side-menu-icon toggle-menu-icon">
                         <i class="la la-angle-down"></i>
                     </span>
-                    <a href="admin-dashboard-travellers.html"><i class="la la-users mr-2 text-color-3"></i>Travellers</a>
-                    <ul class="toggle-drop-menu">
-                        <li><a href="admin-dashboard-traveler-detail.html">Traveller Details</a></li>
+                    <a href="#"><i class="la la-calendar-check mr-2 text-color-11"></i>Reservations</a>
+                    <ul class="toggle-drop-menu" {% if route == "/admin/reservations/list" or route == "/admin/reservations/search" or route == "/admin/reservations/search-result"  %}style="display:block" {% endif %}>
+                        <li class="{% if route == "/admin/ticket/list" %} page-active {% endif %} "><a href="/admin/reservations/list">List</a></li>
+                        <li class="{% if route == "/admin/ticket/search" %} page-active {% endif %} "><a href="/admin/reservations/search">Search</a></li>
                     </ul>
                 </li>
-                <li>
+                <li class="{% if route == "/admin/bus/add" or route == "/admin/bus/list" %}page-active active{% endif %} ">
                     <span class="side-menu-icon toggle-menu-icon">
                         <i class="la la-angle-down"></i>
                     </span>
-                    <a href="#"><i class="la la-map-signs mr-2 text-color-9"></i>Locations</a>
-                    <ul class="toggle-drop-menu">
-                        <li><a href="admin-countries.html">Countries</a></li>
-                        <li><a href="admin-airlines.html">Airlines</a></li>
+                    <a href="#"><i class="la la-bus mr-2 text-color-9"></i>Bus</a>
+                    <ul class="toggle-drop-menu"
+                        {% if route == "/admin/bus/add" or route == "/admin/bus/list" %}style="display:block" {% endif %}>
+                        <li class="{% if route == "/admin/bus/add" %}page-active {% endif %} ">
+                            <a href="/admin/bus/add">Add</a>
+                        </li>
+                        <li class="{% if route == "/admin/bus/list" %}page-active {% endif %} "><a
+                                href="/admin/bus/list">List</a></li>
                     </ul>
                 </li>
-                <li><a href="admin-dashboard-settings.html"><i class="la la-cog mr-2 text-color-10"></i>Settings</a></li>
-                <li><a href="index.html"><i class="la la-power-off mr-2 text-color-11"></i>Logout</a></li>
+                <li class="{% if route == "/admin/routes/add" or route == "/admin/routes/list" %}page-active active{% endif %} ">
+                    <span class="side-menu-icon toggle-menu-icon">
+                        <i class="la la-angle-down"></i>
+                    </span>
+                    <a href="#"><i class="la la-location-arrow mr-2 text-color-8"></i>Routes</a>
+                    <ul class="toggle-drop-menu"
+                        {% if route == "/admin/routes/add" or route == "/admin/routes/list" %}style="display:block" {% endif %}>
+                        <li class="{% if route == "/admin/routes/add" %}page-active {% endif %} "><a
+                                href="/admin/routes/add">Add</a></li>
+                        <li class="{% if  route == "/admin/routes/list" %}page-active {% endif %} "><a
+                                href="/admin/routes/list">List</a></li>
+                    </ul>
+                </li>
+                <li class="{% if route == "/admin/ticket/add" or route == "/admin/ticket/list" %}page-active active{% endif %} ">
+                    <span class="side-menu-icon toggle-menu-icon">
+                        <i class="la la-angle-down"></i>
+                    </span>
+                    <a href="#"><i class="la la-ticket mr-2 text-color-5"></i>Tickets</a>
+                    <ul class="toggle-drop-menu"
+                        {% if route == "/admin/ticket/add" or route == "/admin/ticket/list" or route == "/admin/ticket/search" or route == "/admin/ticket/search-result" %}style="display:block" {% endif %}>
+                        <li class="{% if route == "/admin/ticket/add" %}page-active {% endif %} "><a
+                                href="/admin/ticket/add">Add</a></li>
+                        <li class="{% if route == "/admin/ticket/list" %} page-active {% endif %} "><a
+                                href="/admin/ticket/list">List</a></li>
+                        <li class="{% if route == "/admin/ticket/search" %} page-active {% endif %} "><a
+                                href="/admin/ticket/search">Search</a></li>
+                    </ul>
+                </li>
+                <li class="{% if route == "/admin/users" %}page-active {% endif %} "><a href="/admin/users"><i
+                        class="la la-calendar-check mr-2 text-color-11"></i>Users</a></li>
+                <li class="{% if route == "/admin/transactions" %}page-active {% endif %} "><a
+                        href="/admin/transactions"><i class="la la-money mr-2 text-color-3"></i>Transactions</a></li>
+                {#                <li class="{% if route == "/admin/settings"   %}page-active {% endif %} "><a href="/admin/settings"><i class="la la-cog mr-2 text-color-10"></i>Settings</a></li>#}
+                <li><a href="/admin/logout"><i class="la la-power-off mr-2 text-color-11"></i>Logout</a></li>
             </ul>
         </div><!-- end sidebar-menu-wrap -->
     </div>
@@ -84,7 +118,15 @@
 <!-- ================================
        END DASHBOARD NAV
 ================================= -->
-{% block content %}{% endblock %}
+
+<section class="dashboard-area">
+    {% include "layout/super-nav.html" %}
+    <div class="dashboard-content-wrap">
+        {% include "layout/super-breadcrumb.html" %}
+        {% block content %}{% endblock %}
+        <div class="border-top mt-5"></div>
+    </div><!-- end dashboard-content-wrap -->
+</section><!-- end dashboard-area -->
 
 
 <!-- start scroll top -->

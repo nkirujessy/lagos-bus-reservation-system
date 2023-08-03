@@ -1,0 +1,105 @@
+{% extends "layout/super-layout.html" %}
+
+
+
+{% block content %}
+<!-- ================================
+    START DASHBOARD AREA
+================================= -->
+    <div class="dashboard-main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-box">
+                        <div class="form-title-wrap">
+                            <h3 class="title">Profile Setting</h3>
+                        </div>
+                        <div class="form-content">
+                            <div class="contact-form-action">
+                                <form action="#">
+                                    <div class="row">
+                                        <div class="col-lg-6 responsive-column">
+                                            <div class="input-box">
+                                                <label class="label-text">Full Name</label>
+                                                <div class="form-group">
+                                                    <span class="la la-user form-icon"></span>
+                                                    <input class="form-control" type="text" value="{{ session.fullname }}">
+                                                </div>
+                                            </div>
+                                        </div><!-- end col-lg-6 -->
+                                        <div class="col-lg-6 responsive-column">
+                                            <div class="input-box">
+                                                <label class="label-text">Email Address</label>
+                                                <div class="form-group">
+                                                    <span class="la la-envelope form-icon"></span>
+                                                    <input class="form-control" type="text" value="{{ session.email }}">
+                                                </div>
+                                            </div>
+                                        </div><!-- end col-lg-6 -->
+                                        <div class="col-lg-12">
+                                            <div class="btn-box">
+                                                <button class="theme-btn" type="button">Save Changes</button>
+                                            </div>
+                                        </div><!-- end col-lg-12 -->
+                                    </div><!-- end row -->
+                                </form>
+                            </div>
+                        </div>
+                    </div><!-- end form-box -->
+                </div><!-- end col-lg-6 -->
+                <div class="col-lg-6">
+                    <div class="form-box">
+                        <div class="form-title-wrap">
+                            <h3 class="title">Change Password</h3>
+                        </div>
+                        <div class="form-content">
+                            <div class="contact-form-action">
+                                <form action="#">
+                                    <div class="row">
+                                        <div class="col-lg-6 responsive-column">
+                                            <div class="input-box">
+                                                <label class="label-text">Current Password</label>
+                                                <div class="form-group">
+                                                    <span class="la la-lock form-icon"></span>
+                                                    <input class="form-control" type="text" placeholder="Current password">
+                                                </div>
+                                            </div>
+                                        </div><!-- end col-lg-6 -->
+                                        <div class="col-lg-6 responsive-column">
+                                            <div class="input-box">
+                                                <label class="label-text">New Password</label>
+                                                <div class="form-group">
+                                                    <span class="la la-lock form-icon"></span>
+                                                    <input class="form-control" type="text" placeholder="New password">
+                                                </div>
+                                            </div>
+                                        </div><!-- end col-lg-6 -->
+                                        <div class="col-lg-6 responsive-column">
+                                            <div class="input-box">
+                                                <label class="label-text">New Password Again</label>
+                                                <div class="form-group">
+                                                    <span class="la la-lock form-icon"></span>
+                                                    <input class="form-control" type="text" placeholder="New password again">
+                                                </div>
+                                            </div>
+                                        </div><!-- end col-lg-6 -->
+                                        <div class="col-lg-12">
+                                            <div class="btn-box">
+                                                <button class="theme-btn" type="button">Change Password</button>
+                                            </div>
+                                        </div><!-- end col-lg-12 -->
+                                    </div><!-- end row -->
+                                </form>
+                            </div>
+                        </div>
+                    </div><!-- end form-box -->
+                </div><!-- end col-lg-6 -->
+            </div><!-- end row -->
+        </div><!-- end container-fluid -->
+    </div><!-- end dashboard-main-content -->
+<!-- ================================
+    END DASHBOARD AREA
+================================= -->
+
+
+{% endblock %}

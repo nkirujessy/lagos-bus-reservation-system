@@ -25,6 +25,7 @@ app.register_blueprint(user_app_route)
 app.register_blueprint(admin_app_route)
 
 
+
 @app.route('/home')
 @app.route('/')
 def home():

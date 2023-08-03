@@ -5,6 +5,8 @@ from sqlalchemy.sql import func
 from sqlalchemy import UUID
 class routes(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
+    name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
     startLocationId = db.Column(db.String(255), nullable=False)
     endLocationId = db.Column(db.String(255), nullable=False)
     # ticket = db.relationship(ticket, backref='routes', lazy=True)

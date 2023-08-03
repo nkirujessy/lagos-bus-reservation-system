@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="author" content="NK">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ session.fullname }} - {{ path }}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/brt-logo.png') }}">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet">
+
+    <!-- Template CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/line-awesome.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fancybox.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animated-headline.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flag-icon.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/toastr/toastr.min.css') }}">
+
+</head>
+<body class="section-bg">
+<!-- start cssload-loader -->
+
+
+
+<!-- ================================
+       START DASHBOARD NAV
+================================= -->
+<div class="sidebar-nav">
+    <div class="sidebar-nav-body">
+        <div class="side-menu-close">
+            <i class="la la-times"></i>
+        </div><!-- end menu-toggler -->
+        <div class="author-content">
+            <div class="d-flex align-items-center">
+                <div class="author-bio">
+                    <h4 class="author__title">{{ session.fullname }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu-wrap d-flex  flex-column justify-content-center" style="height: 50vh">
+            <ul class="sidebar-menu list-items justify-content-between">
+                <li class="{% if route == "/app/overview" %} page-active {% endif %}"><a href="/app/overview"><i class="la la-dashboard mr-2"></i>Overview</a></li>
+                <li class="{% if route == "/app/reservations" %} page-active {% endif %}"><a href="/app/reservations"><i class="la la-shopping-cart mr-2 text-color"></i>Reservations</a></li>
+                <li class="{% if route == "/app/profile" %} page-active {% endif %}" ><a href="/app/profile"><i class="la la-user mr-2 text-color-2"></i>Profile</a></li>
+                <li class="{% if route == "/app/account" %} page-active {% endif %}" ><a href="/app/account"><i class="la la-cog mr-2 text-color-5"></i>Account</a></li>
+                <li><a href="/logout"><i class="la la-power-off mr-2 text-color-6"></i>Logout</a></li>
+            </ul>
+        </div><!-- end sidebar-menu-wrap -->
+    </div>
+</div><!-- end sidebar-nav -->
+
+{% block content %}{% endblock %}
+
+<!-- start scroll top -->
+<div id="back-to-top">
+    <i class="la la-angle-up" title="Go top"></i>
+</div>
+<!-- end scroll top -->
+
+<!-- Template JS Files -->
+<script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/toastr/toastr.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/daterangepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.fancybox.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.countTo.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/animated-headline.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart.extension.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bar-chart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.ripples-min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='script/helpers.js') }}"></script>
+<script src="{{ url_for('static', filename='script/script.js') }}"></script>
+</body>
+</html>

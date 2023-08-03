@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="N.K" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>{{ path }} - Lagos State Bus Reservation System</title>
+    <!-- Favicon -->
+    <link rel="icon"  href="{{ url_for('static', filename='images/brt-logo.png') }}" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap&cache=yes" rel="stylesheet"
+    />
+
+    <!-- Template CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/line-awesome.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fancybox.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/daterangepicker.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animated-headline.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flag-icon.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/toastr/toastr.min.css') }}">
+</head>
+<body>
+{% include "auth/login.html" %}
+{% include "auth/signup.html" %}
+{#{% include "layout/preloader.html" %}#}
+
+<header class="header-area">
+
+    <div class="header-menu-wrapper padding-right-100px padding-left-100px">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="menu-wrapper">
+                        <a href="#" class="down-button"
+                        ><i class="la la-angle-down"></i
+                        ></a>
+                        <div class="logo">
+                            <a  class="text-dark font-weight-bold" href="/"
+                            >
+                                <div class="justify-content-center d-flex flex-row align-items-center" >
+
+                                    <img  src="{{ url_for('static', filename='images/brt-logo.png') }}" alt="logo"
+                                         width="100" />
+                                    <span style="margin-top: 8px">Lagos Bus Reservation System</span>
+                                </div>
+
+                            </a>
+                            <div class="menu-toggler">
+                                <i class="la la-bars"></i>
+                                <i class="la la-times"></i>
+                            </div>
+                            <!-- end menu-toggler -->
+                        </div>
+                        <!-- end logo -->
+                        <div class="main-menu-content">
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a href="/">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="/tickets">Tickets</a>
+                                    </li>
+                                    <li>
+                                        <a href="/buses">Buses</a>
+                                    </li>
+                                    <li>
+                                        <a href="/routes">Routes</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- end main-menu-content -->
+                        <div class="nav-btn">
+                        {% if session.user %}
+
+                            <a
+                                    href="/app/overview"
+                                    class="theme-btn theme-btn-small theme-btn-transparent mr-1"
+                            > {{ session.fullname }}</a
+                            >
+                            <a
+                                    href="/logout"
+                                    class="theme-btn theme-btn-small"
+                            >Logout</a
+                            >
+                            {% else %}
+
+                            <a
+                                    href="#"
+                                    class="theme-btn theme-btn-small theme-btn-transparent mr-1"
+                                    data-toggle="modal"
+                                    data-target="#signupPopupForm"
+                            >Sign Up</a
+                            >
+                            <a
+                                    href="#"
+                                    class="theme-btn theme-btn-small"
+                                    data-toggle="modal"
+                                    data-target="#loginPopupForm"
+                            >Login</a
+                            >
+
+                        {% endif %}
+                        </div>
+                        <!-- end nav-btn -->
+                    </div>
+                    <!-- end menu-wrapper -->
+                </div>
+                <!-- end col-lg-12 -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container-fluid -->
+    </div>
+    <!-- end header-menu-wrapper -->
+</header>
+<!-- ================================
+     END HEADER AREA
+================================= -->
+<!-- ================================
+START BREADCRUMB AREA
+================================= -->
+
+{% if path  !=  "Home"  %}
+    <section class="breadcrumb-area bread-bg">
+        <div class="breadcrumb-wrap">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="breadcrumb-content">
+                            <div class="section-heading">
+                                <h2 class="sec__title text-white">{{ path }}</h2>
+                            </div>
+                        </div><!-- end breadcrumb-content -->
+                    </div><!-- end col-lg-6 -->
+                    <div class="col-lg-6">
+                        <div class="breadcrumb-list text-right">
+                            <ul class="list-items">
+                                <li><a href="/">Home</a></li>
+                                <li>{{ path }}</li>
+                            </ul>
+                        </div><!-- end breadcrumb-list -->
+                    </div><!-- end col-lg-6 -->
+                </div><!-- end row -->
+            </div><!-- end container -->
+        </div><!-- end breadcrumb-wrap -->
+        <div class="bread-svg-box">
+            <svg class="bread-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 10" preserveAspectRatio="none"><polygon points="100 0 50 10 0 0 0 10 100 10"></polygon></svg>
+        </div><!-- end bread-svg -->
+    </section><!-- end breadcrumb-area -->
+{% endif %}
+
+<!-- ================================
+    END BREADCRUMB AREA
+================================= -->
+
+{% block content %}{% endblock %}
+<!-- ================================
+   START FOOTER AREA
+================================= -->
+<section class="footer-area section-bg padding-top-100px padding-bottom-30px">
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="copy-right padding-top-30px">
+                    <p class="copy__desc">
+                        &copy; Copyright LBRS 2023.
+                    </p>
+                </div>
+                <!-- end copy-right -->
+            </div>
+            <!-- end col-lg-7 -->
+            <div class="col-lg-5">
+                <div
+                        class="copy-right-content d-flex align-items-center justify-content-end padding-top-30px"
+                >
+                    <h3 class="title font-size-15 pr-2">We Accept</h3>
+                    <img src="https://techydevs.com/demos/trizen/html/images/payment-img.png" alt="" />
+                </div>
+                <!-- end copy-right-content -->
+            </div>
+            <!-- end col-lg-5 -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container -->
+</section>
+<!-- end footer-area -->
+<!-- ================================
+   START FOOTER AREA
+================================= -->
+
+<!-- start back-to-top -->
+<div id="back-to-top">
+    <i class="la la-angle-up" title="Go top"></i>
+</div>
+<!-- end back-to-top -->
+
+
+
+<!-- Template JS Files -->
+<script  src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/toastr/toastr.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/daterangepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.fancybox.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.countTo.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/animated-headline.js') }}"></script>
+<script  src="{{ url_for('static', filename='js/jquery.ripples-min.js') }}" ></script>
+<script  src="{{ url_for('static', filename='js/quantity-input.js') }}" ></script>
+{#<script  src="{{ url_for('static', filename='js/jquery.autocomplete.js') }}" ></script>#}
+{#<script  src="{{ url_for('static', filename='js/jquery.autocomplete.js') }}" ></script>#}
+<script src="{{ url_for('static', filename='script/helpers.js') }}"></script>
+<script src="{{ url_for('static', filename='script/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+
+{% extends "layout/app-layout.html" %}
+
+
+
+{% block content %}
+
+    <!-- ================================
+      END DASHBOARD NAV
+================================= -->
+
+    <!-- ================================
+        START DASHBOARD AREA
+    ================================= -->
+    <section class="dashboard-area">
+        {% include "layout/app-nav.html" %}
+        <div class="dashboard-content-wrap">
+            <div class="dashboard-bread">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <div class="breadcrumb-content">
+                                <div class="section-heading">
+                                    <h2 class="sec__title font-size-30 text-white">Hi, {{ session.fullname }} Welcome Back!</h2>
+                                </div>
+                            </div><!-- end breadcrumb-content -->
+                        </div><!-- end col-lg-6 -->
+                    </div><!-- end row -->
+
+                    <div class="row mt-4">
+                        <div class="col-lg-4 responsive-column-m">
+                            <div class="icon-box icon-layout-2 dashboard-icon-box">
+                                <div class="d-flex">
+                                    <div class="info-icon icon-element flex-shrink-0">
+                                        <i class="la la-shopping-cart"></i>
+                                    </div><!-- end info-icon-->
+                                    <div class="info-content">
+                                        <p class="info__desc">Reservations</p>
+                                        <h4 class="info__title">{{ reserve_count }}</h4>
+                                    </div><!-- end info-content -->
+                                </div>
+                            </div>
+                        </div><!-- end col-lg-3 -->
+                        <div class="col-lg-4 responsive-column-m">
+                            <div class="icon-box icon-layout-2 dashboard-icon-box">
+                                <div class="d-flex">
+                                    <div class="info-icon icon-element bg-3 flex-shrink-0">
+                                        <i class="la la-bus"></i>
+                                    </div><!-- end info-icon-->
+                                    <div class="info-content">
+                                        <p class="info__desc">Commutes</p>
+                                        <h4 class="info__title">{{ trans_count }}</h4>
+                                    </div><!-- end info-content -->
+                                </div>
+                            </div>
+                        </div><!-- end col-lg-3 -->
+                        <div class="col-lg-4 responsive-column-m">
+                            <div class="icon-box icon-layout-2 dashboard-icon-box">
+                                <div class="d-flex">
+                                    <div class="info-icon icon-element bg-4 flex-shrink-0">
+                                        <i class="la la-ticket"></i>
+                                    </div><!-- end info-icon-->
+                                    <div class="info-content">
+                                        <p class="info__desc">Active Tickets</p>
+                                        <h4 class="info__title">{{ tickets_count }}</h4>
+                                    </div><!-- end info-content -->
+                                </div>
+                            </div>
+                        </div><!-- end col-lg-3 -->
+                    </div><!-- end row -->
+                </div>
+            </div><!-- end dashboard-bread -->
+
+        </div><!-- end dashboard-content-wrap -->
+    </section><!-- end dashboard-area -->
+    <!-- ================================
+        END DASHBOARD AREA
+    ================================= -->
+
+{% endblock %}

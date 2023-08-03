@@ -43,7 +43,18 @@ def page_not_found(e):
 
 app.add_url_rule("/", endpoint="index")
 
-with app.app_context():
-    db.create_all()
+engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+inspector = db.inspect(engine)
+if not inspector.has_table("users"):
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+        app.logger.info('Initialized the database!')
+
+
+else:
+ app.logger.info('Database already contains the users table.')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

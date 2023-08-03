@@ -16,14 +16,14 @@
                                 <div class="d-flex pb-3 justify-content-between">
                                     <div class="info-content">
                                         <p class="info__desc">Total Reservations</p>
-                                        <h4 class="info__title">55</h4>
+                                        <h4 class="info__title">{{ reservation_count }}</h4>
                                     </div><!-- end info-content -->
                                     <div class="info-icon icon-element bg-4">
                                         <i class="la la-calendar-check"></i>
                                     </div><!-- end info-icon-->
                                 </div>
                                 <div class="section-block"></div>
-                                <a href="/admin/reservations" class="d-flex align-items-center justify-content-between view-all">View All <i class="la la-angle-right"></i></a>
+                                <a href="/admin/reservations/list" class="d-flex align-items-center justify-content-between view-all">View All <i class="la la-angle-right"></i></a>
                             </div>
                         </div><!-- end col-lg-3 -->
                         <div class="col-lg-3 responsive-column-l">
@@ -31,14 +31,14 @@
                                 <div class="d-flex pb-3 justify-content-between">
                                     <div class="info-content">
                                         <p class="info__desc">Total Routes</p>
-                                        <h4 class="info__title">22</h4>
+                                        <h4 class="info__title">{{ route_count }}</h4>
                                     </div><!-- end info-content -->
                                     <div class="info-icon icon-element bg-3">
                                         <i class="la la-location-arrow"></i>
                                     </div><!-- end info-icon-->
                                 </div>
                                 <div class="section-block"></div>
-                                <a href="/admin/routes" class="d-flex align-items-center justify-content-between view-all">View All <i class="la la-angle-right"></i></a>
+                                <a href="/admin/routes/list" class="d-flex align-items-center justify-content-between view-all">View All <i class="la la-angle-right"></i></a>
                             </div>
                         </div><!-- end col-lg-3 -->
                         <div class="col-lg-3 responsive-column-l">
@@ -46,7 +46,7 @@
                                 <div class="d-flex pb-3 justify-content-between">
                                     <div class="info-content">
                                         <p class="info__desc">Total Users</p>
-                                        <h4 class="info__title">27</h4>
+                                        <h4 class="info__title">{{ users_count }}</h4>
                                     </div><!-- end info-content -->
                                     <div class="info-icon icon-element bg-2">
                                         <i class="la la-user"></i>
@@ -61,7 +61,7 @@
                                 <div class="d-flex pb-3 justify-content-between">
                                     <div class="info-content">
                                         <p class="info__desc">Total Tickets</p>
-                                        <h4 class="info__title">25</h4>
+                                        <h4 class="info__title">{{ ticket_count }}</h4>
                                     </div><!-- end info-content -->
                                     <div class="info-icon icon-element bg-1">
                                         <i class="la la-ticket"></i>

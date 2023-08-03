@@ -96,13 +96,12 @@
                     </span>
                     <a href="#"><i class="la la-ticket mr-2 text-color-5"></i>Tickets</a>
                     <ul class="toggle-drop-menu"
-                        {% if route == "/admin/ticket/add" or route == "/admin/ticket/list" or route == "/admin/ticket/search" or route == "/admin/ticket/search-result" %}style="display:block" {% endif %}>
+                        {% if route == "/admin/ticket/add" or route == "/admin/ticket/list" %}style="display:block" {% endif %}>
                         <li class="{% if route == "/admin/ticket/add" %}page-active {% endif %} "><a
                                 href="/admin/ticket/add">Add</a></li>
                         <li class="{% if route == "/admin/ticket/list" %} page-active {% endif %} "><a
                                 href="/admin/ticket/list">List</a></li>
-                        <li class="{% if route == "/admin/ticket/search" %} page-active {% endif %} "><a
-                                href="/admin/ticket/search">Search</a></li>
+
                     </ul>
                 </li>
                 <li class="{% if route == "/admin/users" %}page-active {% endif %} "><a href="/admin/users"><i

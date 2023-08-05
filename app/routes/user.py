@@ -7,7 +7,7 @@ users_route = Blueprint('users_route', __name__,template_folder='templates')
 
 @users_route.route('/signup', methods=['GET', 'POST'])
 def register():
-    msg = ''
+    message = ''
     status = False
 
     if request.method == 'POST' and 'name' in request.form and 'email' in request.form and 'password' in request.form and 'confirmpassword' in request.form:
@@ -18,35 +18,40 @@ def register():
         hashed_password = generate_password_hash(password)
         status = 1
         role = 'user'
-        user = db.session.execute(db.select(users).filter_by(email=email)).scalar_one()
+        user = users.query.filter_by(email=email).all()
 
 
         if cpassword != password:
-            msg = 'Password doesnt match'
-        elif user:
-            msg = 'User already exists.'
+            message = 'Password doesnt match'
+            status = False
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address !'
+            message = 'Invalid email address !'
+            status = False
         elif not password or not email or not fullname:
-            msg = 'Please fill out the form.'
+            message = 'Please fill out the form.'
+            status = False
+        elif user:
+            message = 'User already exists.'
+            status = False
 
         else:
             newuser =  users(fullname=fullname, email=email, password=hashed_password, role=role, status=status)
             db.session.add(newuser)
             db.session.commit()
+            message = 'Signup successful'
             status = True
-            msg = 'Signup successful'
     elif request == 'POST':
-        msg = 'Please fill out the form !'
+        message = 'Please fill out the form !'
+        status = False
     return jsonify({
-        'message': msg,
-        'user': status
+        'message': message,
+        'status': status
     })
 
 
 @users_route.route('/login', methods=['GET', 'POST'])
 def login():
-    msg = ''
+    message = ''
     status = False
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
@@ -61,14 +66,14 @@ def login():
                 session['id'] = user.id
                 session['email'] = user.email
                 session['fullname'] = user.fullname
-                msg = 'Login successful'
+                message = 'Login successful'
                 status = True
         else:
-            msg = 'Incorrect login details'
+            message = 'Incorrect login details'
             status = False
 
     return jsonify({
-        'message': msg,
+        'message': message,
         'status': status
     })
 

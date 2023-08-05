@@ -61,7 +61,14 @@
     </div>
 </div><!-- end sidebar-nav -->
 
-{% block content %}{% endblock %}
+
+<section class="dashboard-area">
+    {% include "layout/app-nav.html" %}
+    <div class="dashboard-content-wrap">
+        {% if path != "Dashboard"  %}{% include "layout/app-breadcrumb.html" %} {% endif %}
+        {% block content %}{% endblock %}
+    </div><!-- end dashboard-content-wrap -->
+</section><!-- end dashboard-area -->
 
 <!-- start scroll top -->
 <div id="back-to-top">

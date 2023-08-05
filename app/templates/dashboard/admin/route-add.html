@@ -15,36 +15,36 @@
                             <h3 class="title"><i class="la la-bus mr-2 text-gray"></i>Route information</h3>
                         </div><!-- form-title-wrap -->
                         <div class="form-content contact-form-action">
-                            <form method="post" class="row">
+                            <form method="post" class="row" id="addroute">
                                 <div class="col-lg-12 responsive-column">
                                     <div class="input-box">
                                         <label class="label-text">Route Name</label>
                                         <div class="form-group">
                                             <span class="la la-map-marker form-icon"></span>
-                                            <input class="form-control" type="text" name="text" placeholder="Enter Route Name" id="name">
+                                            <input class="form-control" type="text" name="route_name" placeholder="Enter Route Name">
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
-                                        <label class="label-text">Start Route</label>
+                                        <label class="label-text">Start Location</label>
                                         <div class="form-group select-contain w-100">
-                                            <select class="select-contain-select">
-                                                <option value="1">Car type</option>
-                                                <option value="2">Car type</option>
-                                                <option value="3">Car type</option>
+                                            <select class="select-contain-select" name="start_route">
+                                                {% for location in locations %}
+                                                <option value="{{ location.id }}">{{ location.location }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
-                                        <label class="label-text">End Route</label>
+                                        <label class="label-text">End Location</label>
                                         <div class="form-group select-contain w-100">
-                                            <select class="select-contain-select">
-                                                <option value="1">Car type</option>
-                                                <option value="2">Car type</option>
-                                                <option value="3">Car type</option>
+                                            <select class="select-contain-select" name="end_route">
+                                                {% for location in locations %}
+                                                    <option value="{{ location.id }}">{{ location.location }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -54,14 +54,14 @@
                                         <label class="label-text mb-0 line-height-20">Route Description</label>
                                         <div class="form-group">
                                             <span class="la la-pencil form-icon"></span>
-                                            <textarea class="message-control form-control" name="message" placeholder="Write...         "></textarea>
+                                            <textarea class="message-control form-control" name="description" placeholder="Write...         "></textarea>
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-12 -->
                                 <div class="col-lg-6 responsive-column submit-box">
                                     <div class="btn-box pt-3">
-                                        <button type="submit" class="theme-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
-                                        <button  class="theme-btn w-100 d-none" type="button" id="spinner-btn-login" disabled>
+                                        <button type="button" id="add-route-btn" class="theme-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
+                                        <button  class="theme-btn d-none" type="button" id="add-route-spinner" disabled>
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             Loading...
                                         </button>

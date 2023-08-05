@@ -10,29 +10,39 @@ from app.models.transactionmodel import transaction
 def user_dashboard():
     path = "Dashboard"
     active_route = request.path
+    user = session.get('id')
     if not session.get('user'):
         return redirect('/')
-    reservations = reservation.query.count()
 
-    transactions = transaction.query.count()
-    active_tickets = reservation.query.count()
+    reservations = reservation.query.filter_by(userId=user).count()
+
+    transactions = transaction.query.filter_by(userId=user).count()
+    active_tickets = reservation.query.filter_by(userId=user, status=1).count()
 
 
     return render_template("dashboard/user/index.html", route=active_route, path=path, reserve_count=reservations, trans_count=transactions, tickets_count=active_tickets)
 @user_app_route.route("/app/reservations")
 def user_reservation():
+    if not session.get('user'):
+        return redirect('/')
     path = "Reservations"
     active_route = request.path
-    return render_template("dashboard/user/user-dashboard-booking.html",route=active_route, path=path)
+    user = session.get('id')
+    reservations = reservation.query.filter_by(userId=user).all()
+    return render_template("dashboard/user/user-reservations.html",reserve_list=reservations,route=active_route, path=path)
 
 @user_app_route.route("/app/profile")
 def user_profile():
+    if not session.get('user'):
+        return redirect('/')
     path = "Profile"
     active_route = request.path
     return render_template("dashboard/user/user-dashboard-profile.html",route=active_route, path=path)
 
 @user_app_route.route("/app/account")
 def user_account():
+    if not session.get('user'):
+        return redirect('/')
     path = "Account"
     active_route = request.path
     return render_template("dashboard/user/user-dashboard-settings.html",route=active_route, path=path)

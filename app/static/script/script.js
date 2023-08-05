@@ -54,7 +54,7 @@ const fetchlocations = async ()=> {
 }
 
 
-console.log(window.location.pathname)
+
 if (pathname === ``) {
     fetchlocations()
 }
@@ -97,15 +97,11 @@ $(`#login`).click( async function() {
 $(`#admin-login`).click( async function() {
     try {
         const role = (window.location.pathname === `/admin/login`)?`admin`: `driver`
-        const data = {
-            email: $(`#super-email`).val(),
-            password: $(`#super-password`).val(),
-            role: role
-        }
+        const form = formSerialize("#admin-loginform")
         const request = await  $.ajax({
             method: `POST`,
             url: `/super/login_process`,
-            data: data,
+            data: {...form, role:role},
             dataType: `json`,
             beforeSend: function (){
                 $(`#admin-login`).addClass(`d-none`)
@@ -116,6 +112,8 @@ $(`#admin-login`).click( async function() {
                 $(`.spinner-btn-login`).addClass(`d-none`)
             }
         })
+
+
 
             if (request.status) {
                 login_modal.modal('hide');
@@ -136,17 +134,12 @@ $(`#admin-login`).click( async function() {
 $(`#signup`).click(async function() {
 
     try {
-        const data = {
-            email: $(`#signupemail`).val(),
-            password: $(`#signuppass`).val(),
-            name: $(`#signupfname`).val(),
-            confirmpassword: $(`#signupconfirmpass`).val()
-        }
+        const form = formSerialize("#signupform")
 
      const request = await   $.ajax({
             method: `POST`,
             url: `/signup`,
-            data: data,
+            data: form,
             dataType: `json`,
             beforeSend: function (){
                 $(`#signup`).addClass(`d-none`)
@@ -161,6 +154,7 @@ $(`#signup`).click(async function() {
 
             if (request.status) {
                 toastr.success(request.message)
+                $('#signupform').trigger("reset");
                 register_modal.modal('hide');
                 setTimeout(()=> {
                     login_modal.modal('show');
@@ -206,16 +200,19 @@ $(`#search-bus`).click(async function(e){
                 $(`#spinner-btn-search`).addClass(`d-none`)
             }
         })
-
+        console.log(request)
         if (!request.status){
-            setTimeout(() => {
-                window.location.href = `/search?result=false`
-            }, 500)
+
+            toastr.error(request.message)
 
         }else {
-            setTimeout(() => {
-                window.location.href = `/search?start=${data.start_route}&end=${data.end_route}&departure=${data.departure_date}&adult=${data.adult}&children=${data.children}&ticket=`
-            }, 500)
+            toastr.success(request.message)
+            for (const value of request.data) {
+                setTimeout(() => {
+
+                    window.location.href = `/search?adult=${data.adult}&children=${data.children}&response=${JSON.stringify({route:value.routeId,bus:value.busId,ticket:value.id})}&status=true`
+                }, 1000)
+            }
         }
     }
     catch (error){
@@ -223,3 +220,104 @@ $(`#search-bus`).click(async function(e){
     }
 })
 
+
+if (window.location.pathname === `/admin/bus/add`) {
+    try {
+
+
+
+        $(`#add-bus-btn`).click(async function(e) {
+            const form = formSerialize("#addbus")
+            const request = await $.ajax({
+                method: `POST`,
+                url: `/admin/bus/add_process`,
+                data: form,
+                dataType: `json`,
+                beforeSend: function () {
+                    $(`#add-bus-btn`).addClass(`d-none`)
+                    $(`#add-bus-spinner`).removeClass(`d-none`)
+                },
+                complete: function () {
+                    $(`#add-bus-btn`).removeClass(`d-none`)
+                    $(`#add-bus-spinner`).addClass(`d-none`)
+                }
+            })
+
+            if (request.status) {
+                toastr.success(request.message)
+                $('#addbus').trigger("reset");
+            } else {
+                toastr.error(request.message)
+            }
+        })
+    }catch (error) {
+        toastr.error(error)
+    }
+
+}
+if (window.location.pathname === `/admin/routes/add`) {
+    try {
+
+        $(`#add-route-btn`).click(async function(e) {
+            const form = formSerialize("#addroute")
+            console.log(form)
+            const request = await $.ajax({
+                method: `POST`,
+                url: `/admin/route/add_process`,
+                data: form,
+                dataType: `json`,
+                beforeSend: function () {
+                    $(`#add-route-btn`).addClass(`d-none`)
+                    $(`#add-route-spinner`).removeClass(`d-none`)
+                },
+                complete: function () {
+                    $(`#add-route-btn`).removeClass(`d-none`)
+                    $(`#add-route-spinner`).addClass(`d-none`)
+                }
+            })
+
+            if (request.status) {
+                toastr.success(request.message)
+                $('#addroute').trigger("reset");
+            } else {
+                toastr.error(request.message)
+            }
+        })
+    }catch (error) {
+        toastr.error(error)
+    }
+
+}
+if (window.location.pathname === `/admin/ticket/add`) {
+    try {
+
+        $(`#add-ticket-btn`).click(async function(e) {
+            const form = formSerialize("#addticket")
+            console.log(form)
+            const request = await $.ajax({
+                method: `POST`,
+                url: `/admin/ticket/add_process`,
+                data: form,
+                dataType: `json`,
+                beforeSend: function () {
+                    $(`#add-ticket-btn`).addClass(`d-none`)
+                    $(`#add-ticket-spinner`).removeClass(`d-none`)
+                },
+                complete: function () {
+                    $(`#add-ticket-btn`).removeClass(`d-none`)
+                    $(`#add-ticket-spinner`).addClass(`d-none`)
+                }
+            })
+
+            if (request.status) {
+                toastr.success(request.message)
+                $('#addticket').trigger("reset");
+            } else {
+                toastr.error(request.message)
+            }
+        })
+    }catch (error) {
+        toastr.error(error)
+    }
+
+}

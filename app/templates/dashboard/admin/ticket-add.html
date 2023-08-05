@@ -15,13 +15,13 @@
                             <h3 class="title"><i class="la la-bus mr-2 text-gray"></i>Ticket information</h3>
                         </div><!-- form-title-wrap -->
                         <div class="form-content contact-form-action">
-                            <form method="post" class="row">
+                            <form method="post" class="row" id="addticket">
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
                                         <label class="label-text">Ticket Name</label>
                                         <div class="form-group">
                                             <span class="la la-tag form-icon"></span>
-                                            <input class="form-control" type="text" name="text" placeholder="Enter Ticket Name" id="name">
+                                            <input class="form-control" type="text" name="name" placeholder="Enter Ticket Name" id="name">
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -30,7 +30,7 @@
                                         <label class="label-text">Ticket Fee</label>
                                         <div class="form-group">
                                             <span class="la la-money form-icon"></span>
-                                            <input class="form-control" type="tel" name="max_occupancy" id="max_occupancy" placeholder="Enter Ticket Fee">
+                                            <input class="form-control" type="tel" name="fee" placeholder="Enter Ticket Fee">
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -38,7 +38,7 @@
                                     <div class="input-box">
                                         <label class="label-text">Available</label>
                                         <div class="form-group select-contain w-100">
-                                            <select class="select-contain-select">
+                                            <select class="select-contain-select" name="available">
                                                 <option value="1">Yes</option>
                                                 <option value="2">No</option>
                                             </select>
@@ -52,9 +52,9 @@
                                             <span class="la la-calendar form-icon"></span>
                                             <input
                                                     class="date-range form-control"
-                                                    type="text"
-                                                    name="daterange-single"
-                                                    readonly
+                                                    type="date"
+                                                    name="availability_date"
+
 
                                             />
                                         </div>
@@ -67,9 +67,9 @@
                                             <span class="la la-calendar form-icon"></span>
                                             <input
                                                     class="date-range form-control"
-                                                    type="text"
-                                                    name="daterange-single"
-                                                    readonly
+                                                    type="datetime-local"
+                                                    name="departure_time"
+
 
                                             />
                                         </div>
@@ -82,9 +82,8 @@
                                             <span class="la la-calendar form-icon"></span>
                                             <input
                                                     class="date-range form-control"
-                                                    type="text"
-                                                    name="daterange-single"
-                                                    readonly
+                                                    type="datetime-local"
+                                                    name="arrival_time"
 
                                             />
                                         </div>
@@ -92,22 +91,26 @@
                                 </div><!-- end col-lg-6 -->
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
-                                        <label class="label-text">Choose Bus</label>
+                                        <label class="label-text">Bus</label>
                                         <div class="form-group select-contain w-100">
-                                            <select class="select-contain-select">
-                                                <option value="1">Yes</option>
-                                                <option value="2">No</option>
+                                            <select class="select-contain-select" name="bus">
+                                                <option value="" selected>Choose Bus</option>
+                                                {% for data in bus_list %}
+                                                <option value="{{ data.id }}">{{ data.name }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
-                                        <label class="label-text">Choose Route</label>
+                                        <label class="label-text">Route</label>
                                         <div class="form-group select-contain w-100">
-                                            <select class="select-contain-select">
-                                                <option value="1">Yes</option>
-                                                <option value="2">No</option>
+                                            <select class="select-contain-select" name="route">
+                                            <option value="" selected>Choose Route</option>
+                                                {% for data in routes_list %}
+                                                    <option value="{{ data.id }}">{{ data.name }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -117,14 +120,14 @@
                                         <label class="label-text mb-0 line-height-20">Ticket Description</label>
                                         <div class="form-group">
                                             <span class="la la-pencil form-icon"></span>
-                                            <textarea class="message-control form-control" name="message" placeholder="Write...         "></textarea>
+                                            <textarea class="message-control form-control" name="description" placeholder="Write...         "></textarea>
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-12 -->
                                 <div class="col-lg-6  submit-box">
                                     <div class="btn-box pt-3">
-                                        <button type="submit" class="theme-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
-                                        <button  class="theme-btn w-100 d-none" type="button" id="spinner-btn-login" disabled>
+                                        <button type="button" class="theme-btn" id="add-ticket-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
+                                        <button  class="theme-btn d-none" type="button" id="add-ticket-spinner" disabled>
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             Loading...
                                         </button>

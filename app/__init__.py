@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 
+import string
+import random
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@127.0.0.1/lbrs'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -23,6 +25,7 @@ app.register_blueprint(locations_route)
 app.register_blueprint(bus_route)
 app.register_blueprint(user_app_route)
 app.register_blueprint(admin_app_route)
+
 
 
 

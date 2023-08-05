@@ -15,13 +15,13 @@
                             <h3 class="title"><i class="la la-bus mr-2 text-gray"></i>Bus information</h3>
                         </div><!-- form-title-wrap -->
                         <div class="form-content contact-form-action">
-                            <form method="post" class="row">
+                            <form method="post" id="addbus" class="row">
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
                                         <label class="label-text">Bus Number</label>
                                         <div class="form-group">
                                             <span class="la la-hashtag form-icon"></span>
-                                            <input class="form-control" type="text" name="text" placeholder="Enter Bus Number" id="name">
+                                            <input class="form-control" type="text" id="bus_name" name="bus_name" placeholder="Enter Bus Number" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -30,7 +30,7 @@
                                         <label class="label-text">Maximum Passengers</label>
                                         <div class="form-group">
                                             <span class="la la-people-carry form-icon"></span>
-                                            <input class="form-control" type="tel" name="max_occupancy" id="max_occupancy" placeholder="Enter Max Passengers">
+                                            <input class="form-control" type="tel" name="max_occupancy" placeholder="Enter Max Passengers">
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -39,7 +39,7 @@
                                         <label class="label-text">Adult</label>
                                         <div class="form-group">
                                             <span class="la la-user-plus form-icon"></span>
-                                            <input class="form-control" type="tel" name="adults" id="adults" placeholder="Enter Number of Adults">
+                                            <input class="form-control" type="tel" name="adult"  placeholder="Enter Number of Adults">
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -57,23 +57,23 @@
                                         <label class="label-text mb-0 line-height-20">Bus Description</label>
                                         <div class="form-group">
                                             <span class="la la-pencil form-icon"></span>
-                                            <textarea class="message-control form-control" name="message" placeholder="Write...         "></textarea>
+                                            <textarea class="message-control form-control" name="description" placeholder="Write...         "></textarea>
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-12 -->
+                                <div class="col-lg-6  submit-box">
+                                    <div class="btn-box pt-3">
+                                        <button type="button" class="theme-btn " id="add-bus-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
+                                        <button  class="theme-btn d-none" id="add-bus-spinner" type="button" disabled>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Loading...
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         </div><!-- end form-content -->
                     </div><!-- end form-box -->
-                    <div class="submit-box">
-                        <div class="btn-box pt-3">
-                            <button type="submit" class="theme-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
-                            <button  class="theme-btn w-100 d-none" type="button" id="spinner-btn-login" disabled>
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Loading...
-                            </button>
-                        </div>
 
-                    </div><!-- end submit-box -->
                 </div><!-- end col-lg-12 -->
             </div><!-- end row -->
         </div><!-- end container-fluid -->

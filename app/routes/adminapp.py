@@ -1,5 +1,7 @@
+import random
+import string
+
 from flask import Blueprint, render_template, request, jsonify, session, redirect
-from sqlalchemy.orm import lazyload, joinedload
 from werkzeug.security import check_password_hash
 
 from app import db, app
@@ -11,41 +13,47 @@ from app.models.usersmodel import users
 from app.models.ticketmodel import ticket
 from app.models.busmodel import bus
 from app.models.transactionmodel import transaction
+from app.models.locationmodel import location
 admin_app_route = Blueprint('admin_app_route', __name__, template_folder='templates')
 
 
+def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
 @admin_app_route.route('/super/login_process', methods=['GET', 'POST'])
 def login_process():
 
-    msg = ''
-    status = False
-    if request.method == 'POST':
-        email = request.form['email']
-    password = request.form['password']
-    role = request.form['role']
 
-    if not email:
-        msg = 'Email is required'
-    elif not password:
-        msg = 'Password is required'
-    user = db.one_or_404(db.select(users).filter_by(email=email))
+ if request.method == 'POST':
+     message = 'Error Occurred'
+     status = False
+     email = request.form['email']
+     password = request.form['password']
+     role = request.form['role']
+     if not email:
+         message = 'Email is required'
+         status=False
+     elif not password:
+         message = 'Password is required'
+         status = False
+     else:
+        user = db.one_or_404(db.select(users).filter_by(email=email))
+        if user:
+            if check_password_hash(user.password, password) and user.role == role:
+                session[role] = True
+                session['id'] = user.id
+                session['email'] = user.email
+                session['fullname'] = user.fullname
+                message = 'Login successful'
+                status = True
+ # else:
+ #    message = 'Incorrect login details'
+ #    status = False
+        return jsonify({
+        'message': message,
+        'status': status
+    })
 
-    if user:
-        if check_password_hash(user.password, password) and user.role == role:
-            session[role] = True
-            session['id'] = user.id
-            session['email'] = user.email
-            session['fullname'] = user.fullname
-            msg = 'Login successful'
-            status = True
-    else:
-        msg = 'Incorrect login details'
-        status = False
 
-    return jsonify({
-            'message': msg,
-            'status': status
-        })
 
 
 @admin_app_route.route('/admin/login')
@@ -119,6 +127,41 @@ def admin_bus_add():
     path = 'Add Bus'
     active_route = request.path
     return render_template('dashboard/admin/bus-add.html', path=path, route=active_route)
+@admin_app_route.route('/admin/bus/add_process', methods=['POST','GET'])
+def admin_bus_add_process():
+    status = False
+    message = 'Error Occured'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        bus_name = request.form['bus_name']
+        capacity = request.form['max_occupancy']
+        adult = request.form['adult']
+        children = request.form['children']
+        desc = request.form['description']
+        status = 1
+
+        if not bus_name:
+            message = 'Bus number is required'
+            status= False
+        elif not capacity:
+            message = 'Maximum occupancy is required'
+            status = False
+
+
+        else:
+            newbus =  bus(name=bus_name,description=desc,max_occupancy=capacity, adult=adult, children=children,  status=status)
+            db.session.add(newbus)
+            db.session.commit()
+            status = True
+            message = 'Bus created.'
+    elif request == 'POST':
+        message = 'Please fill out the form !'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 
 @admin_app_route.route('/admin/ticket/list')
 def admin_ticket_list():
@@ -126,7 +169,9 @@ def admin_ticket_list():
         return redirect('/admin/login')
     path = 'Ticket List'
     active_route = request.path
-    t_list = ticket.query.all()
+    # t_list = ticket.query.all()
+    t_list = db.session.query(ticket).filter(ticket.routeId == routes.id, ticket.busId == bus.id).all()
+    app.logger.info('Ticket Lit')
     return render_template('dashboard/admin/ticket-list.html',ticket_list=t_list, path=path,route=active_route)
 @admin_app_route.route('/admin/ticket/add')
 def admin_ticket_add():
@@ -134,9 +179,73 @@ def admin_ticket_add():
         return redirect('/admin/login')
     path = 'Ticket Add'
     active_route = request.path
-    return render_template('dashboard/admin/ticket-add.html', path=path, route=active_route)
+    routes_list = routes.query.filter_by(status=1).all()
+    bus_list = bus.query.filter_by(status=1).all()
+    return render_template('dashboard/admin/ticket-add.html', bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
+
+@admin_app_route.route('/admin/ticket/add_process', methods=['POST','GET'])
+def admin_ticket_add_process():
+    status = False
+    message = 'Error Occurred'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        name = request.form['name']
+        fee = request.form['fee']
+        available = request.form['available']
+        avail_date = request.form['availability_date']
+        dept = request.form['departure_time']
+        arrival = request.form['arrival_time']
+        bus = request.form['bus']
+        route = request.form['route']
+        desc = request.form['description']
+        status = 1
+        ticket_number = id_generator()
+        if not name:
+            message = 'Ticket name is required'
+            status= False
+        elif not fee:
+            message = 'Fee is required'
+            status = False
+        elif not int(fee):
+            message = 'Fee should be number'
+            status = False
+        elif not available:
+            message = 'Is ticket available should be selected'
+            status = False
+        elif not avail_date:
+            message = 'Availability date is required'
+            status = False
+        elif not dept:
+            message = 'Departure time is required'
+            status = False
+        elif not arrival:
+            message = 'Arrival time is required'
+            status = False
+        elif not bus:
+            message = 'Bus is required'
+            status = False
+        elif not route:
+            message = 'Route is required'
+            status = False
+        elif not desc:
+            message = 'Description is required'
+            status = False
 
 
+        else:
+            data =  ticket(name=name,description=desc,fee=fee, ticket_number=ticket_number, routeId=route,busId=bus,available=available, availability_date=avail_date, arrival_datetime=arrival,departure_datetime=dept,  status=status)
+            db.session.add(data)
+            db.session.commit()
+            status = True
+            message = 'Ticket created.'
+    elif request == 'POST':
+        message = 'Please fill out the form !'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 
 
 @admin_app_route.route('/admin/routes/list')
@@ -153,7 +262,45 @@ def admin_routes_add():
         return redirect('/admin/login')
     path = 'Add Route'
     active_route = request.path
-    return render_template('dashboard/admin/route-add.html', path=path, route=active_route)
+    locations = location.query.all()
+    return render_template('dashboard/admin/route-add.html', locations=locations,path=path, route=active_route)
+@admin_app_route.route('/admin/route/add_process', methods=['POST','GET'])
+def admin_route_add_process():
+    status = False
+    message = 'Error Occured'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        route_name = request.form['route_name']
+        start = request.form['start_route']
+        end = request.form['end_route']
+        desc = request.form['description']
+        status = 1
+
+        if not route_name:
+            message = 'Route name is required'
+            status= False
+        elif not start:
+            message = 'Start Location is required'
+            status = False
+        elif not end:
+            message = 'End Location is required'
+            status = False
+
+
+        else:
+            data =  routes(name=route_name,description=desc,start_routeId=start, end_routeId=end, status=status)
+            db.session.add(data)
+            db.session.commit()
+            status = True
+            message = 'Route created.'
+    elif request == 'POST':
+        message = 'Please fill out the form !'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 @admin_app_route.route('/admin/users')
 def admin_users():
     if not session.get('admin'):

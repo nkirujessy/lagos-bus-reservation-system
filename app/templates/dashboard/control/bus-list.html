@@ -23,6 +23,7 @@
                                 <tr>
                                     <th scope="col">No</th>
                                     <th scope="col">Number</th>
+                                    <th scope="col">Driver</th>
                                     <th scope="col">Capacity</th>
                                     <th scope="col">Adult</th>
                                     <th scope="col">Children</th>
@@ -41,11 +42,12 @@
                                         <h3 class="title">{{ bus.name }}</h3>
                                     </div>
                                 </td>
+                                <td>{{ bus.users.fullname }}</td>
                                 <td>{{ bus.max_occupancy }}</td>
                                 <td>{{ bus.adult }}</td>
                                 <td>{{ bus.children }}</td>
                                 <td>{{ bus.created }}</td>
-                                <td><span class="badge {% if bus.status == 1 %}badge-success {% elif bus.status == 2%} badge-warning {% else %} badge-danger {% endif %}text-white py-1 px-2">{{ bus.status }}</span></td>
+                                <td><span class="badge {% if bus.status == 1 %}badge-success {% elif bus.status == 2%} badge-warning {% else %} badge-danger {% endif %}text-white py-1 px-2">{% if bus.status == 1 %}Active  {% else %} Inactive {% endif %}</span></td>
                             <td>
                                 <div class="table-content">
                                     <a href="#" class="theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Edit"><i class="la la-pencil"></i></a>

@@ -7,7 +7,7 @@ from flask import Blueprint, render_template, request, jsonify, session, redirec
 from werkzeug.security import check_password_hash
 
 from app import db, app
-from app.models.usersmodel import users
+from app.helpers.util import app_config
 
 from app.models.reservationmodel import reservation
 from app.models.routemodel import routes
@@ -16,6 +16,7 @@ from app.models.ticketmodel import ticket
 from app.models.busmodel import bus
 from app.models.transactionmodel import transaction
 from app.models.locationmodel import location
+from app.models.locationmodel import routes as route_location
 control_app_route = Blueprint('control_app_route', __name__, template_folder='templates')
 
 
@@ -23,37 +24,39 @@ def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 @control_app_route.route('/control/login_process', methods=['GET', 'POST'])
 def login_process():
+    message = 'Error Occurred'
+    status = False
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        role = request.form['role']
+        app.logger.info(role)
 
-
- if request.method == 'POST':
-     message = 'Error Occurred'
-     status = False
-     email = request.form['email']
-     password = request.form['password']
-     role = request.form['role']
-     if not email:
+        if not email:
          message = 'Email is required'
          status=False
-     elif not password:
+
+        elif not password:
          message = 'Password is required'
-         status = False
-     else:
-        user = db.one_or_404(db.select(users).filter_by(email=email))
-        if user:
-            if check_password_hash(user.password, password) and user.role == role:
-                session[role] = True
-                session['id'] = user.id
-                session['email'] = user.email
-                session['fullname'] = user.fullname
-                message = 'Login successful'
-                status = True
- # else:
- #    message = 'Incorrect login details'
- #    status = False
-        return jsonify({
+         status =False
+
+        else:
+             user = users.query.filter_by(email=email).first()
+             if user:
+                if check_password_hash(user.password, password) and user.role == role:
+                    session[role] = True
+                    session['id'] = user.id
+                    session['email'] = user.email
+                    session['fullname'] = user.fullname
+                    message = 'Login successful'
+                    status = True
+    return jsonify({
+
         'message': message,
         'status': status
     })
+
+
 
 
 
@@ -91,7 +94,7 @@ def control_overview():
 @control_app_route.route('/control/reservations/list')
 def control_reservations():
     if not session.get('admin') and not session.get('driver'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Reservations'
     active_route = request.path
     r_list = reservation.query.join(users).all()
@@ -99,7 +102,7 @@ def control_reservations():
 @control_app_route.route('/control/reservations/search')
 def control_reservation_search():
     if not session.get('admin') and not session.get('driver'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Search Reservation'
     active_route = request.path
 
@@ -108,7 +111,7 @@ def control_reservation_search():
 @control_app_route.route('/control/reservations/search_process', methods=['POST','GET'])
 def control_reservation_search_process():
     if not session.get('admin') and not session.get('driver'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     status= False
     message='Error Occurred'
     data=[]
@@ -136,54 +139,79 @@ def control_reservation_search_process():
     'data':data
     })
 
-@control_app_route.route('/control/reservations/search/result')
+@control_app_route.route('/control/reservations/search/result', methods=['POST','GET'])
 def control_reservation_search_result():
     if not session.get('admin') and not session.get('driver'):
-        return redirect('/control/login')
+        return redirect('/')
     path = 'Reservation Search Result'
     active_route = request.path
-    return render_template('dashboard/control/reservations-search-result.html', path=path, route=active_route)
+    r_details= ''
+    number = request.args.get("number")
+    if not "number" in request.args or number == '':
+       return redirect('/404')
+    else:
+      r_details = reservation.query.filter(reservation.reservation_number==number).join(users).join(ticket).first()
+      if not r_details:
+         return  redirect('/404')
+    return render_template('dashboard/control/reservations-search-result.html', path=path, route=active_route, result=r_details)
 @control_app_route.route('/control/bus/list')
 def control_bus_list():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Bus List'
     active_route = request.path
-    b_list = bus.query.all()
+    b_list = bus.query.join(users).all()
 
     return render_template('dashboard/control/bus-list.html',bus_list=b_list,path=path, route=active_route)
 
 @control_app_route.route('/control/bus/add')
 def control_bus_add():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Add Bus'
     active_route = request.path
-    return render_template('dashboard/control/bus-add.html', path=path, route=active_route)
+    dr_list = users.query.filter(users.role=='driver').all()
+    return render_template('dashboard/control/bus-add.html', drivers_list=dr_list, path=path, route=active_route)
 @control_app_route.route('/control/bus/add_process', methods=['POST','GET'])
 def control_bus_add_process():
     status = False
-    message = 'Error Occured'
+    message = 'Error Occurred'
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     if request.method == 'POST':
         bus_name = request.form['bus_name']
         capacity = request.form['max_occupancy']
         adult = request.form['adult']
         children = request.form['children']
+        driver = request.form['driver']
         desc = request.form['description']
         status = 1
+        check_name = bus.query.filter_by(name=bus_name).first()
 
+        if check_name:
+            message = 'Bus with number already exist.'
+            status= False
         if not bus_name:
             message = 'Bus number is required'
             status= False
         elif not capacity:
             message = 'Maximum occupancy is required'
             status = False
-
+        elif not driver:
+            message = 'Driver is required'
+            status = False
+        elif not adult:
+            message = 'Adult is required'
+            status = False
+        elif not children:
+            message = 'Children is required'
+            status = False
+        elif not desc:
+            message = 'Description is required'
+            status = False
 
         else:
-            newbus =  bus(name=bus_name,description=desc,max_occupancy=capacity, adult=adult, children=children,  status=status)
+            newbus =  bus(name=bus_name,description=desc,max_occupancy=capacity, adult=adult, children=children,driverId=driver,  status=status)
             db.session.add(newbus)
             db.session.commit()
             status = True
@@ -199,29 +227,30 @@ def control_bus_add_process():
 @control_app_route.route('/control/ticket/list')
 def control_ticket_list():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Ticket List'
     active_route = request.path
     # t_list = ticket.query.all()
-    t_list = db.session.query(ticket).filter(ticket.routeId == routes.id, ticket.busId == bus.id).all()
+    t_list = ticket.query.join(users).join(bus).join(routes).all()
     app.logger.info('Ticket Lit')
     return render_template('dashboard/control/ticket-list.html',ticket_list=t_list, path=path,route=active_route)
 @control_app_route.route('/control/ticket/add')
 def control_ticket_add():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Ticket Add'
     active_route = request.path
     routes_list = routes.query.filter_by(status=1).all()
     bus_list = bus.query.filter_by(status=1).all()
-    return render_template('dashboard/control/ticket-add.html', bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
+    dr_list = users.query.filter(users.role=='driver').all()
+    return render_template('dashboard/control/ticket-add.html',drivers_list=dr_list, bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
 
 @control_app_route.route('/control/ticket/add_process', methods=['POST','GET'])
 def control_ticket_add_process():
     status = False
     message = 'Error Occurred'
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     if request.method == 'POST':
         name = request.form['name']
         fee = request.form['fee']
@@ -230,6 +259,7 @@ def control_ticket_add_process():
         dept = request.form['departure_time']
         arrival = request.form['arrival_time']
         bus = request.form['bus']
+        driver = request.form['driver']
         route = request.form['route']
         desc = request.form['description']
         status = 1
@@ -258,6 +288,9 @@ def control_ticket_add_process():
         elif not bus:
             message = 'Bus is required'
             status = False
+        elif not driver:
+            message = 'Driver is required'
+            status = False
         elif not route:
             message = 'Route is required'
             status = False
@@ -267,7 +300,7 @@ def control_ticket_add_process():
 
 
         else:
-            data =  ticket(name=name,description=desc,fee=fee, ticket_number=ticket_number, routeId=route,busId=bus,available=available, availability_date=avail_date, arrival_datetime=arrival,departure_datetime=dept,  status=status)
+            data =  ticket(name=name,description=desc,fee=fee, ticket_number=ticket_number, routeId=route,busId=bus,available=available, availability_date=avail_date, arrival_datetime=arrival,departure_datetime=dept, driverId=driver, status=status)
             db.session.add(data)
             db.session.commit()
             status = True
@@ -284,15 +317,16 @@ def control_ticket_add_process():
 @control_app_route.route('/control/routes/list')
 def control_routes_list():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Routes List'
     active_route = request.path
     r_list = routes.query.all()
+    app.logger.info(r_list)
     return render_template('dashboard/control/route-list.html' ,route_list=r_list, path=path, route=active_route)
 @control_app_route.route('/control/routes/add')
 def control_routes_add():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Add Route'
     active_route = request.path
     locations = location.query.all()
@@ -302,7 +336,7 @@ def control_route_add_process():
     status = False
     message = 'Error Occured'
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     if request.method == 'POST':
         route_name = request.form['route_name']
         start = request.form['start_route']
@@ -337,7 +371,7 @@ def control_route_add_process():
 @control_app_route.route('/control/users')
 def control_users():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Users'
     active_route = request.path
     u_list =  users.query.all()
@@ -345,7 +379,7 @@ def control_users():
 @control_app_route.route('/control/transactions')
 def control_transactions():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Transactions'
     active_route = request.path
     t_list = transaction.query.all()
@@ -353,14 +387,14 @@ def control_transactions():
 @control_app_route.route('/control/settings')
 def control_settings():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Settings'
     active_route = request.path
     return render_template('dashboard/control/settings.html', path=path, route=active_route)
 @control_app_route.route('/control/profile')
 def control_profile():
     if not session.get('admin'):
-        return redirect('/control/login')
+        return redirect('/admin/login')
     path = 'Profile'
     active_route = request.path
     return render_template('dashboard/control/profile.html', path=path, route=active_route)

@@ -7,14 +7,14 @@ locations_route = Blueprint('locations_route', __name__,template_folder='templat
 
 class LocationsSchema(Schema):
     class Meta:
-        fields = ('id','location','status','created')
+        fields = ('id','name','routes','status','created')
 
 location_schema = LocationsSchema()
 locations_schema = LocationsSchema(many=True)
 
 @locations_route.route('/locations', methods=['GET'])
 def locations():
-    locations = db.session.execute(db.select(location).order_by(location.id)).scalars()
+    locations = db.session.execute(db.select(location).order_by(location.name)).scalars()
     result = locations_schema.dump(locations)
     return jsonify({
         'message': 'Locations Fetched',

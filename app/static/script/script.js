@@ -18,7 +18,7 @@ const fetchlocations = async ()=> {
         for (const x in req.data){
 
             locations.push({
-                label: req.data[x].location,
+                label: req.data[x].name,
                 value: req.data[x].id
             })
         }
@@ -96,22 +96,24 @@ $(`#login`).click( async function() {
 })
 $(`#admin-login`).click( async function() {
     try {
-        const role = (window.location.pathname === `/admin/login`)?`control`: `driver`
-        const form = formSerialize("#control-loginform")
+        const role = (window.location.pathname === `/admin/login`)?`admin`: `driver`
+        const form = formSerialize("#admin-loginform")
+        console.log(form)
         const request = await  $.ajax({
             method: `POST`,
             url: `/control/login_process`,
             data: {...form, role:role},
             dataType: `json`,
             beforeSend: function (){
-                $(`#control-login`).addClass(`d-none`)
+                $(`#admin-login`).addClass(`d-none`)
                 $(`.spinner-btn-login`).removeClass(`d-none`)
             },
             complete: function (){
-                $(`#control-login`).removeClass(`d-none`)
+                $(`#admin-login`).removeClass(`d-none`)
                 $(`.spinner-btn-login`).addClass(`d-none`)
             }
         })
+        console.log(request)
 
 
 
@@ -227,6 +229,7 @@ if (window.location.pathname === `/control/bus/add`) {
 
         $(`#add-bus-btn`).click(async function(e) {
             const form = formSerialize("#addbus")
+            console.log(form)
             const request = await $.ajax({
                 method: `POST`,
                 url: `/control/bus/add_process`,
@@ -277,11 +280,10 @@ if (window.location.pathname === `/control/reservations/search` || window.locati
                 }
             })
 
-            console.log(request)
             if (request.status) {
                 toastr.success(request.message)
                 setTimeout(()=> {
-                    window.location.href = `/control/reservations/search/result?response=${JSON.stringify(request.data)}&status=true`
+                    window.location.href = `/control/reservations/search/result?number=${request.data.reservation_number}&status=true`
                 },1000)
             } else {
                 toastr.error(request.message)

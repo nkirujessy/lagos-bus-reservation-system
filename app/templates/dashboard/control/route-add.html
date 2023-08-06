@@ -31,7 +31,7 @@
                                         <div class="form-group select-contain w-100">
                                             <select class="select-contain-select" name="start_route">
                                                 {% for location in locations %}
-                                                <option value="{{ location.id }}">{{ location.location }}</option>
+                                                <option value="{{ location.id }}">{{ location.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -43,7 +43,7 @@
                                         <div class="form-group select-contain w-100">
                                             <select class="select-contain-select" name="end_route">
                                                 {% for location in locations %}
-                                                    <option value="{{ location.id }}">{{ location.location }}</option>
+                                                    <option value="{{ location.id }}">{{ location.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

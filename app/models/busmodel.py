@@ -16,6 +16,7 @@ class bus(db.Model):
     max_occupancy = db.Column(db.Integer, nullable=False, default=0)
     status = db.Column(db.Integer, nullable=False)
     ticket = db.relationship('ticket', backref=backref('bus'))
+    driverId = db.Column(db.String(225), db.ForeignKey('users.id'), nullable=False)
     created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
 

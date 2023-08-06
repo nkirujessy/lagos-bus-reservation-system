@@ -6,6 +6,7 @@
 <!-- ================================
     START DASHBOARD AREA
 ================================= -->
+    {{ result.ticket.id }}
     <div class="dashboard-main-content">
         <div class="container-fluid">
             <div class="row">
@@ -13,7 +14,7 @@
                     <div class="form-box">
                         <div class="form-title-wrap">
                             <div class="d-flex align-items-center justify-content-between">
-                                <h3 class="title">Booking Results</h3>
+                                <h3 class="title">Reservation Results</h3>
                             </div>
                         </div>
                         <div class="form-content pb-2">
@@ -26,18 +27,16 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
-                                        <h3 class="card-title">Hotel Malte – Astotel</h3>
-                                        <span class="badge badge-warning text-white ml-2">Pending</span>
+                                        <h3 class="card-title">{{ result.ticket.routes.name }}</h3>
+                                        <span class="badge {% if result.status == 1%} badge-success {% elif result.status == 2%} badge-warning {% elif result.status == 3%} badge-danger {% else %} badge-danger {% endif %} text-white ml-2">{% if result.status == 1%} Approved {% elif result.status == 2%} Pending {% elif result.status == 3%} Expired {% else %}  Cancelled {% endif %}</span>
                                     </div>
                                     <ul class="list-items list-items-2 pt-2 pb-3">
-                                        <li><span>Start date:</span>12 December 2019</li>
-                                        <li><span>End date:</span>12 Jun 2020</li>
-                                        <li><span>Booking details:</span> 3 People</li>
-                                        <li><span>Client:</span> David Martin</li>
+                                        <li><span>Departure:</span>{{ result.ticket.departure_datetime }}</li>
+                                        <li><span>Arrival:</span>{{ result.ticket.arrival_datetime }}</li>
+                                        <li><span>Passengers</span>Adult: {{ result.adult }} | Children: {{ result.children }} | Total: {{ result.adult + result.children }}</li>
+{#                                        <li><span>Fee</span>{{result.transaction.amount }}</li>#}
+                                        <li><span>User:</span> {{ result.users.fullname }}</li>
                                     </ul>
-                                    <div class="btn-box">
-                                        <a href="#" class="theme-btn theme-btn-small theme-btn-transparent" data-toggle="modal" data-target="#modalPopup"><i class="la la-envelope mr-1"></i>Send Message</a>
-                                    </div>
                                 </div>
                                 <div class="action-btns">
                                     <a href="#" class="theme-btn theme-btn-small mr-2"><i class="la la-check-circle mr-1"></i>Approve</a>

@@ -31,9 +31,9 @@
                                     <tbody>
                                     {% for route in route_list %}
                                     <tr>
-                                        <th scope="row">{{ loop.revindex }}</th>
+                                        <th scope="row">{{ loop.index }}</th>
                                         <th scope="row">{{ route.name }}</th>
-                                        <td>{{ route.start_routeId }} to {{ route.end_routeId }}</td>
+                                        <td>{{ route.start_route.name }} <i class="la la-exchange mx-2"></i> {{ route.end_route.name }}</td>
                                         <td><span class="badge {% if route.status == 1 %}badge-success {% else %} badge-danger {% endif %}text-white py-1 px-2">{% if route.status == 1 %}Active {% else %}Inactive {% endif %}</span></td>
                                         <td>
                                             <div class="table-content">

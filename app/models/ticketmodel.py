@@ -18,6 +18,7 @@ class ticket(db.Model,SerializerMixin):
     ticket_number = db.Column(db.String(225), nullable=False)
     routeId = db.Column(db.String(225), db.ForeignKey('routes.id'), nullable=False)
     busId = db.Column(db.String(225), db.ForeignKey('bus.id'), nullable=False)
+    driverId = db.Column(db.String(225), db.ForeignKey('users.id'), nullable=False)
     reservation = db.relationship(reservation,  backref='ticket', lazy=True)
     available = db.Column(db.Integer, nullable=False)
     availability_date = db.Column(db.Date(), nullable=False)

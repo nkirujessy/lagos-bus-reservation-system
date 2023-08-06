@@ -1,0 +1,161 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+<!-- ================================
+    START BOOKING AREA
+================================= -->
+<section class="booking-area padding-top-100px padding-bottom-70px">
+    <div class="container">
+        <div class="row">
+            {% if session.user %}
+            <div class="col-lg-8">
+                <div class="form-box">
+                    <div class="form-title-wrap">
+                        <h3 class="title">Reservation Submission</h3>
+                    </div><!-- form-title-wrap -->
+                    <div class="form-content ">
+                        <div class="contact-form-action">
+                            <form method="post" id="reserveform">
+                                <div class="row">
+                                    <div class="col-lg-6 responsive-column">
+                                        <div class="input-box">
+                                            <label class="label-text">Your Fullname</label>
+                                            <div class="form-group">
+                                                <span class="la la-user form-icon"></span>
+                                                <input class="form-control" value="{{ session.fullname }}" type="text" name="text" placeholder="Fullname">
+                                            </div>
+                                        </div>
+                                    </div><!-- end col-lg-6 -->
+                                    <div class="col-lg-6 responsive-column">
+                                        <div class="input-box">
+                                            <label class="label-text">Your Email</label>
+                                            <div class="form-group">
+                                                <span class="la la-envelope-o form-icon"></span>
+                                                <input class="form-control" type="email" value="{{ session.email }}" name="email" placeholder="Email address">
+                                            </div>
+                                        </div>
+                                    </div><!-- end col-lg-6 -->
+                                </div>
+                            </form>
+                        </div><!-- end contact-form-action -->
+                    </div><!-- end form-content -->
+                </div><!-- end form-box -->
+                <div class="form-box">
+                    <div class="form-title-wrap">
+                        <h3 class="title">Your Payment Information</h3>
+                    </div><!-- form-title-wrap -->
+                    <div class="form-content">
+                        <div class="section-tab check-mark-tab text-center pb-4">
+                            <ul class="nav nav-tabs justify-content-start" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="paypal-tab" data-toggle="tab" href="#paystack" role="tab" aria-controls="paypal" aria-selected="true">
+                                        <i class="la la-check icon-element"></i>
+                                        <img src="{{ url_for('static', filename='images/paystack.png') }}" style="width:100px" alt="">
+                                        <span class="d-block pt-2">Pay with Paystack</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item disabled">
+                                    <a class="nav-link disabled" readonly id="payoneer-tab" data-toggle="tab" href="#payoneer" role="tab" aria-controls="payoneer" aria-selected="true">
+                                        <i class="la la-check icon-element"></i>
+                                        <img src="{{ url_for('static', filename='images/wallet.png') }}" alt="" style="width:25px">
+                                        <span class="d-block pt-2">Pay with Wallet</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div><!-- end section-tab -->
+                        <div class="tab-content d-none">
+                            <div class="tab-pane fade show active" id="paystack" role="tabpanel" aria-labelledby="paypal-tab">
+                                <div class="contact-form-action">
+
+                                </div><!-- end contact-form-action -->
+                            </div><!-- end tab-pane-->
+                            <div class="tab-pane fade" id="payoneer" role="tabpanel" aria-labelledby="payoneer-tab">
+                                <div class="contact-form-action">
+                                    Coming Soon
+                                </div><!-- end contact-form-action -->
+                            </div><!-- end tab-pane-->
+                        </div><!-- end tab-content -->
+                    </div><!-- end form-content -->
+                </div><!-- end form-box -->
+            </div><!-- end col-lg-8 -->
+            <div class="col-lg-4">
+                <div class="form-box booking-detail-form">
+                    <div class="form-title-wrap">
+                        <h3 class="title">Your Reservation</h3>
+                    </div><!-- end form-title-wrap -->
+
+                    <div class="form-content">
+                        {% for data in tickets %}
+                            {{ data.routes.id }}
+                        {% endfor %}
+                        <div class="card-item shadow-none radius-none mb-0">
+                            <div class="card-img pb-4">
+                                <a href="room-details.html" class="d-block">
+                                    <img src="images/img5.jpg" alt="room-img">
+                                </a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3 class="card-title">Premium Lake View Room</h3>
+                                        <p class="card-meta">Mariana's hotel, Mexico</p>
+                                    </div>
+                                    <div>
+                                        <a href="room-details.html" class="btn ml-1"><i class="la la-edit" data-toggle="tooltip" data-placement="top" title="Edit"></i></a>
+                                    </div>
+                                </div>
+                                <div class="section-block"></div>
+                                <ul class="list-items list-items-2 list-items-flush py-2">
+                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>From</span>12 May 2020 7:40am</li>
+                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>To</span>16 May 2020 8:40am</li>
+                                </ul>
+                                <h3 class="card-title pb-3">Order Details</h3>
+                                <div class="section-block"></div>
+                                <ul class="list-items list-items-2 py-3">
+                                    <li><span>Room Type:</span>Luxury</li>
+                                    <li><span>Night:</span>1</li>
+                                    <li><span>Room:</span>1</li>
+                                    <li><span>Guests:</span>2 adults</li>
+                                    <li><span>Extra Services:</span>Cleaning, Laundry, Breakfast</li>
+                                </ul>
+                                <div class="section-block"></div>
+                                <ul class="list-items list-items-2 pt-3">
+                                    <li><span>Sub Total:</span>$240</li>
+                                    <li><span>Taxes And Fees:</span>$5</li>
+                                    <li><span>Total Price:</span>$245</li>
+                                </ul>
+                            </div>
+                            <form method="post" class="py-3">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="btn-box">
+                                            <button class="theme-btn" type="button" id="reserve-btn">Continue</button>
+                                            <button class="theme-btn w-100 d-none" type="button"
+                                                    id="spinner-btn-reserve" disabled>
+                                                    <span class="spinner-border spinner-border-sm" role="status"
+                                                          aria-hidden="true"></span>
+                                                Loading...
+                                            </button>
+                                        </div>
+                                    </div><!-- end col-lg-12 -->
+                                </div>
+                            </form>
+                        </div><!-- end card-item -->
+                    </div><!-- end form-content -->
+                </div><!-- end form-box -->
+            </div><!-- end col-lg-4 -->
+            {% else %}
+                <div class="col-lg-12">
+                <p class="text-center">An account is required to continue, please <a href="javascript:void(0)" data-toggle="modal"
+                                                                                     data-target="#loginPopupForm">Login</a> or <a href="javascript:void(0)" data-toggle="modal"
+                                                                                                                                   data-target="#signupPopupForm">Signup</a></p>
+                </div>
+            {% endif %}
+        </div><!-- end row -->
+    </div><!-- end container -->
+</section><!-- end booking-area -->
+<!-- ================================
+    END BOOKING AREA
+================================= -->
+
+{% endblock %}

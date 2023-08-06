@@ -83,7 +83,7 @@ $(`#login`).click( async function() {
             if (request.status) {
                 login_modal.modal('hide');
                 setTimeout(() => {
-                    window.location.href = `/app/overview`
+                    window.location.reload(true)
                 }, 800)
                 toastr.success(request.message)
             } else {
@@ -96,19 +96,19 @@ $(`#login`).click( async function() {
 })
 $(`#admin-login`).click( async function() {
     try {
-        const role = (window.location.pathname === `/admin/login`)?`admin`: `driver`
-        const form = formSerialize("#admin-loginform")
+        const role = (window.location.pathname === `/admin/login`)?`control`: `driver`
+        const form = formSerialize("#control-loginform")
         const request = await  $.ajax({
             method: `POST`,
-            url: `/super/login_process`,
+            url: `/control/login_process`,
             data: {...form, role:role},
             dataType: `json`,
             beforeSend: function (){
-                $(`#admin-login`).addClass(`d-none`)
+                $(`#control-login`).addClass(`d-none`)
                 $(`.spinner-btn-login`).removeClass(`d-none`)
             },
             complete: function (){
-                $(`#admin-login`).removeClass(`d-none`)
+                $(`#control-login`).removeClass(`d-none`)
                 $(`.spinner-btn-login`).addClass(`d-none`)
             }
         })
@@ -118,7 +118,7 @@ $(`#admin-login`).click( async function() {
             if (request.status) {
                 login_modal.modal('hide');
                 setTimeout(() => {
-                    window.location.href = `/admin/overview`
+                    window.location.href = `/control/overview`
                 }, 800)
                 toastr.success(request.message)
             } else {
@@ -207,12 +207,11 @@ $(`#search-bus`).click(async function(e){
 
         }else {
             toastr.success(request.message)
-            for (const value of request.data) {
-                setTimeout(() => {
+            setTimeout(() => {
 
-                    window.location.href = `/search?adult=${data.adult}&children=${data.children}&response=${JSON.stringify({route:value.routeId,bus:value.busId,ticket:value.id})}&status=true`
+                    window.location.href = `/search?departure=${data.departure_date}&adult=${data.adult}&children=${data.children}&response=${JSON.stringify(request.data)}&status=true`
                 }, 1000)
-            }
+
         }
     }
     catch (error){
@@ -221,7 +220,7 @@ $(`#search-bus`).click(async function(e){
 })
 
 
-if (window.location.pathname === `/admin/bus/add`) {
+if (window.location.pathname === `/control/bus/add`) {
     try {
 
 
@@ -230,7 +229,7 @@ if (window.location.pathname === `/admin/bus/add`) {
             const form = formSerialize("#addbus")
             const request = await $.ajax({
                 method: `POST`,
-                url: `/admin/bus/add_process`,
+                url: `/control/bus/add_process`,
                 data: form,
                 dataType: `json`,
                 beforeSend: function () {
@@ -255,7 +254,45 @@ if (window.location.pathname === `/admin/bus/add`) {
     }
 
 }
-if (window.location.pathname === `/admin/routes/add`) {
+if (window.location.pathname === `/control/reservations/search` || window.location.pathname === `/control/overview`) {
+    try {
+
+
+
+        $(`#reserve-search-btn`).click(async function(e) {
+            const form = formSerialize("#reservesearchform")
+            console.log(form)
+            const request = await $.ajax({
+                method: `POST`,
+                url: `/control/reservations/search_process`,
+                data: form,
+                dataType: `json`,
+                beforeSend: function () {
+                    $(`#reserve-search-btn`).addClass(`d-none`)
+                    $(`#reserve-search-spinner`).removeClass(`d-none`)
+                },
+                complete: function () {
+                    $(`#reserve-search-btn`).removeClass(`d-none`)
+                    $(`#reserve-search-spinner`).addClass(`d-none`)
+                }
+            })
+
+            console.log(request)
+            if (request.status) {
+                toastr.success(request.message)
+                setTimeout(()=> {
+                    window.location.href = `/control/reservations/search/result?response=${JSON.stringify(request.data)}&status=true`
+                },1000)
+            } else {
+                toastr.error(request.message)
+            }
+        })
+    }catch (error) {
+        toastr.error(error)
+    }
+
+}
+if (window.location.pathname === `/control/routes/add`) {
     try {
 
         $(`#add-route-btn`).click(async function(e) {
@@ -263,7 +300,7 @@ if (window.location.pathname === `/admin/routes/add`) {
             console.log(form)
             const request = await $.ajax({
                 method: `POST`,
-                url: `/admin/route/add_process`,
+                url: `/control/route/add_process`,
                 data: form,
                 dataType: `json`,
                 beforeSend: function () {
@@ -288,7 +325,7 @@ if (window.location.pathname === `/admin/routes/add`) {
     }
 
 }
-if (window.location.pathname === `/admin/ticket/add`) {
+if (window.location.pathname === `/control/ticket/add`) {
     try {
 
         $(`#add-ticket-btn`).click(async function(e) {
@@ -296,7 +333,7 @@ if (window.location.pathname === `/admin/ticket/add`) {
             console.log(form)
             const request = await $.ajax({
                 method: `POST`,
-                url: `/admin/ticket/add_process`,
+                url: `/control/ticket/add_process`,
                 data: form,
                 dataType: `json`,
                 beforeSend: function () {

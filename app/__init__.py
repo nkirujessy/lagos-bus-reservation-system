@@ -1,12 +1,16 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+import logging
 
-import string
-import random
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@127.0.0.1/lbrs'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_ECHO'] = True
 app.secret_key = '7e908ae6-8bb1-445f-9cb9-f003fda72397'
+
+logging.basicConfig()
+logger = logging.getLogger('sqlalchemy.engine')
+logger.setLevel(logging.DEBUG)
 
 db = SQLAlchemy(app)
 
@@ -15,7 +19,8 @@ from app.routes.location import locations_route
 from app.routes.bus import bus_route
 from app.routes.search import search_route
 from app.routes.userapp import user_app_route
-from app.routes.adminapp import admin_app_route
+from app.routes.control import control_app_route
+from app.routes.reservation import reserve_route
 
 
 
@@ -24,7 +29,8 @@ app.register_blueprint(users_route)
 app.register_blueprint(locations_route)
 app.register_blueprint(bus_route)
 app.register_blueprint(user_app_route)
-app.register_blueprint(admin_app_route)
+app.register_blueprint(control_app_route)
+app.register_blueprint(reserve_route)
 
 
 

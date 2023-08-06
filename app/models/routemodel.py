@@ -1,10 +1,11 @@
 import uuid
 
 from sqlalchemy.orm import backref
+from sqlalchemy_serializer import SerializerMixin
 
 from app import db
 from sqlalchemy.sql import func
-class routes(db.Model):
+class routes(db.Model,SerializerMixin):
     id = db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=False)

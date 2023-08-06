@@ -8,6 +8,7 @@ from sqlalchemy import UUID
 class transaction(db.Model):
     id = db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
     reference = db.Column(db.String(255), nullable=True)
+    amount = db.Column(db.Integer, nullable=True)
     reservationId = db.Column(db.String(225), db.ForeignKey('reservation.id'), nullable=False)
     userId = db.Column(db.String(225), db.ForeignKey('users.id'), nullable=False)
     status = db.Column(db.Integer, nullable=False)

@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/daterangepicker.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animated-headline.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/flag-icon.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -132,7 +133,7 @@
 START BREADCRUMB AREA
 ================================= -->
 
-{% if path  !=  "Home"  %}
+{% if path  !=  "Home" and path != "Payment Successful"  %}
     <section class="breadcrumb-area bread-bg">
         <div class="breadcrumb-wrap">
             <div class="container">
@@ -225,6 +226,8 @@ START BREADCRUMB AREA
 <script src="{{ url_for('static', filename='js/animated-headline.js') }}"></script>
 <script  src="{{ url_for('static', filename='js/jquery.ripples-min.js') }}" ></script>
 <script  src="{{ url_for('static', filename='js/quantity-input.js') }}" ></script>
+<script  src="{{ url_for('static', filename='js/leaflet.js') }}" ></script>
+<script src="{{ url_for('static', filename='js/bus-stop-map.js') }}"></script>
 {#<script  src="{{ url_for('static', filename='js/jquery.autocomplete.js') }}" ></script>#}
 {#<script  src="{{ url_for('static', filename='js/jquery.autocomplete.js') }}" ></script>#}
 <script src="{{ url_for('static', filename='script/helpers.js') }}"></script>

@@ -1,5 +1,7 @@
+import json
 import random
 import string
+import sys
 
 from flask import Blueprint, render_template, request, jsonify, session, redirect
 from werkzeug.security import check_password_hash
@@ -14,12 +16,12 @@ from app.models.ticketmodel import ticket
 from app.models.busmodel import bus
 from app.models.transactionmodel import transaction
 from app.models.locationmodel import location
-admin_app_route = Blueprint('admin_app_route', __name__, template_folder='templates')
+control_app_route = Blueprint('control_app_route', __name__, template_folder='templates')
 
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
-@admin_app_route.route('/super/login_process', methods=['GET', 'POST'])
+@control_app_route.route('/control/login_process', methods=['GET', 'POST'])
 def login_process():
 
 
@@ -56,26 +58,26 @@ def login_process():
 
 
 
-@admin_app_route.route('/admin/login')
-def admin_login():
+@control_app_route.route('/admin/login')
+def control_login():
     path = 'Admin Login'
-    return render_template('auth/admin-login.html', path=path)
+    return render_template('auth/control-login.html', path=path)
 
 
-@admin_app_route.route('/driver/login')
+@control_app_route.route('/driver/login')
 def driver_login():
     path = 'Driver Login'
-    return render_template('auth/admin-login.html', path=path)
-@admin_app_route.route('/admin/logout')
-def admin_logout():
+    return render_template('auth/control-login.html', path=path)
+@control_app_route.route('/control/logout')
+def control_logout():
     session.pop('admin', None)
     session.pop('id', None)
     session.pop('email', None)
-    return redirect('/admin/login')
-@admin_app_route.route('/admin/overview')
-def admin_overview():
-    if not session.get('admin'):
-        return redirect('/admin/login')
+    return redirect('/')
+@control_app_route.route('/control/overview')
+def control_overview():
+    if not session.get('admin') and not session.get('driver'):
+        return redirect('/')
     path = 'Control Panel'
     active_route = request.path
     r_count = reservation.query.count()
@@ -83,56 +85,87 @@ def admin_overview():
     users_count =  users.query.filter_by(role='user').count()
     ticket_count =  ticket.query.count()
 
-    return render_template('dashboard/admin/index.html',ticket_count=ticket_count,users_count=users_count, reservation_count=r_count, route_count=route_count,path=path, route=active_route)
+    return render_template('dashboard/control/index.html',ticket_count=ticket_count,users_count=users_count, reservation_count=r_count, route_count=route_count,path=path, route=active_route)
 
 
-@admin_app_route.route('/admin/reservations/list')
-def admin_reservations():
-    if not session.get('admin'):
-        return redirect('/admin/login')
+@control_app_route.route('/control/reservations/list')
+def control_reservations():
+    if not session.get('admin') and not session.get('driver'):
+        return redirect('/control/login')
     path = 'Reservations'
     active_route = request.path
-    r_list = reservation.query.all()
-    return render_template('dashboard/admin/reservations.html', reserve_list=r_list,path=path, route=active_route)
-@admin_app_route.route('/admin/reservations/search')
-def admin_reservation_search():
-    if not session.get('admin'):
-        return redirect('/admin/login')
+    r_list = reservation.query.join(users).all()
+    return render_template('dashboard/control/reservations.html', reserve_list=r_list,path=path, route=active_route)
+@control_app_route.route('/control/reservations/search')
+def control_reservation_search():
+    if not session.get('admin') and not session.get('driver'):
+        return redirect('/control/login')
     path = 'Search Reservation'
     active_route = request.path
 
-    return render_template('dashboard/admin/reservations-search.html', path=path, route=active_route)
+    return render_template('dashboard/control/reservations-search.html', path=path, route=active_route)
 
-@admin_app_route.route('/admin/reservations/search/result')
-def admin_reservation_search_result():
-    if not session.get('admin'):
-        return redirect('/admin/login')
+@control_app_route.route('/control/reservations/search_process', methods=['POST','GET'])
+def control_reservation_search_process():
+    if not session.get('admin') and not session.get('driver'):
+        return redirect('/control/login')
+    status= False
+    message='Error Occurred'
+    data=[]
+
+    if request.method == 'POST':
+        reserve_number = request.form['reservation_number']
+
+        if not reserve_number:
+            message='Reservation number required'
+            status=False
+        else:
+            reservations = reservation.query.filter(reservation.reservation_number==reserve_number).one()
+            if reservations:
+                status=True
+
+                message='Result found'
+
+                data = reservations.to_dict()
+            else:
+               message='No result found'
+               status=False
+    return jsonify({
+        'status':status,
+        'message':message,
+    'data':data
+    })
+
+@control_app_route.route('/control/reservations/search/result')
+def control_reservation_search_result():
+    if not session.get('admin') and not session.get('driver'):
+        return redirect('/control/login')
     path = 'Reservation Search Result'
     active_route = request.path
-    return render_template('dashboard/admin/reservations-search-result.html', path=path, route=active_route)
-@admin_app_route.route('/admin/bus/list')
-def admin_bus_list():
+    return render_template('dashboard/control/reservations-search-result.html', path=path, route=active_route)
+@control_app_route.route('/control/bus/list')
+def control_bus_list():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Bus List'
     active_route = request.path
     b_list = bus.query.all()
 
-    return render_template('dashboard/admin/bus-list.html',bus_list=b_list,path=path, route=active_route)
+    return render_template('dashboard/control/bus-list.html',bus_list=b_list,path=path, route=active_route)
 
-@admin_app_route.route('/admin/bus/add')
-def admin_bus_add():
+@control_app_route.route('/control/bus/add')
+def control_bus_add():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Add Bus'
     active_route = request.path
-    return render_template('dashboard/admin/bus-add.html', path=path, route=active_route)
-@admin_app_route.route('/admin/bus/add_process', methods=['POST','GET'])
-def admin_bus_add_process():
+    return render_template('dashboard/control/bus-add.html', path=path, route=active_route)
+@control_app_route.route('/control/bus/add_process', methods=['POST','GET'])
+def control_bus_add_process():
     status = False
     message = 'Error Occured'
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     if request.method == 'POST':
         bus_name = request.form['bus_name']
         capacity = request.form['max_occupancy']
@@ -163,32 +196,32 @@ def admin_bus_add_process():
         'status': status
     })
 
-@admin_app_route.route('/admin/ticket/list')
-def admin_ticket_list():
+@control_app_route.route('/control/ticket/list')
+def control_ticket_list():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Ticket List'
     active_route = request.path
     # t_list = ticket.query.all()
     t_list = db.session.query(ticket).filter(ticket.routeId == routes.id, ticket.busId == bus.id).all()
     app.logger.info('Ticket Lit')
-    return render_template('dashboard/admin/ticket-list.html',ticket_list=t_list, path=path,route=active_route)
-@admin_app_route.route('/admin/ticket/add')
-def admin_ticket_add():
+    return render_template('dashboard/control/ticket-list.html',ticket_list=t_list, path=path,route=active_route)
+@control_app_route.route('/control/ticket/add')
+def control_ticket_add():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Ticket Add'
     active_route = request.path
     routes_list = routes.query.filter_by(status=1).all()
     bus_list = bus.query.filter_by(status=1).all()
-    return render_template('dashboard/admin/ticket-add.html', bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
+    return render_template('dashboard/control/ticket-add.html', bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
 
-@admin_app_route.route('/admin/ticket/add_process', methods=['POST','GET'])
-def admin_ticket_add_process():
+@control_app_route.route('/control/ticket/add_process', methods=['POST','GET'])
+def control_ticket_add_process():
     status = False
     message = 'Error Occurred'
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     if request.method == 'POST':
         name = request.form['name']
         fee = request.form['fee']
@@ -248,28 +281,28 @@ def admin_ticket_add_process():
     })
 
 
-@admin_app_route.route('/admin/routes/list')
-def admin_routes_list():
+@control_app_route.route('/control/routes/list')
+def control_routes_list():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Routes List'
     active_route = request.path
     r_list = routes.query.all()
-    return render_template('dashboard/admin/route-list.html' ,route_list=r_list, path=path, route=active_route)
-@admin_app_route.route('/admin/routes/add')
-def admin_routes_add():
+    return render_template('dashboard/control/route-list.html' ,route_list=r_list, path=path, route=active_route)
+@control_app_route.route('/control/routes/add')
+def control_routes_add():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Add Route'
     active_route = request.path
     locations = location.query.all()
-    return render_template('dashboard/admin/route-add.html', locations=locations,path=path, route=active_route)
-@admin_app_route.route('/admin/route/add_process', methods=['POST','GET'])
-def admin_route_add_process():
+    return render_template('dashboard/control/route-add.html', locations=locations,path=path, route=active_route)
+@control_app_route.route('/control/route/add_process', methods=['POST','GET'])
+def control_route_add_process():
     status = False
     message = 'Error Occured'
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     if request.method == 'POST':
         route_name = request.form['route_name']
         start = request.form['start_route']
@@ -301,33 +334,33 @@ def admin_route_add_process():
         'message': message,
         'status': status
     })
-@admin_app_route.route('/admin/users')
-def admin_users():
+@control_app_route.route('/control/users')
+def control_users():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Users'
     active_route = request.path
     u_list =  users.query.all()
-    return render_template('dashboard/admin/users.html', users_list=u_list, path=path, route=active_route)
-@admin_app_route.route('/admin/transactions')
-def admin_transactions():
+    return render_template('dashboard/control/users.html', users_list=u_list, path=path, route=active_route)
+@control_app_route.route('/control/transactions')
+def control_transactions():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Transactions'
     active_route = request.path
     t_list = transaction.query.all()
-    return render_template('dashboard/admin/transactions.html',transaction_list=t_list, path=path, route=active_route)
-@admin_app_route.route('/admin/settings')
-def admin_settings():
+    return render_template('dashboard/control/transactions.html',transaction_list=t_list, path=path, route=active_route)
+@control_app_route.route('/control/settings')
+def control_settings():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Settings'
     active_route = request.path
-    return render_template('dashboard/admin/settings.html', path=path, route=active_route)
-@admin_app_route.route('/admin/profile')
-def admin_profile():
+    return render_template('dashboard/control/settings.html', path=path, route=active_route)
+@control_app_route.route('/control/profile')
+def control_profile():
     if not session.get('admin'):
-        return redirect('/admin/login')
+        return redirect('/control/login')
     path = 'Profile'
     active_route = request.path
-    return render_template('dashboard/admin/profile.html', path=path, route=active_route)
+    return render_template('dashboard/control/profile.html', path=path, route=active_route)

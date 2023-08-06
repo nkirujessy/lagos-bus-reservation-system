@@ -53,13 +53,13 @@ def buses_search_api():
            check_date= ''
            for ro in check_route:
                check_date =datetime.strptime(dept_date, '%d/%m/%Y').strftime('%Y-%m-%d')
-               tickets = ticket.query.filter(or_(ticket.availability_date >= check_date , ticket.routeId == ro.id)).all()
+               tickets = ticket.query.filter(or_(ticket.availability_date>=check_date , ticket.routeId == ro.id)).all()
 
            if tickets:
             status = True
             message = 'Search result found.'
             data = tickets_schema.dump(tickets)
-            app.logger.info(check_date)
+
            else:
                status = False
                message = 'No ticket found.'

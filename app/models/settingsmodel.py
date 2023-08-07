@@ -19,4 +19,4 @@ class settings(db.Model,SerializerMixin):
 
 
 def __repr__(self):
-    return f'<config {self.id}>'
+    return f'<settings {self.id}>'

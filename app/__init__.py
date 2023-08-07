@@ -55,7 +55,7 @@ app.add_url_rule("/", endpoint="index")
 
 engine = db.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 inspector = db.inspect(engine)
-if not inspector.has_table("users"):
+if not inspector.has_table("users") :
     with app.app_context():
         db.drop_all()
         db.create_all()

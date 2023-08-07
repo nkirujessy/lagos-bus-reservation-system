@@ -67,18 +67,23 @@
                 </li>
             {% endif %}
                 {% if  session.admin %}
-                <li class="{% if route == "/control/bus/add" or route == "/control/bus/list" %}page-active active{% endif %} ">
+                <li class="{% if route == "/control/bus/stop/add" or route == "/control/bus/add" or route == "/control/bus/list" or route == "/control/bus/stops" %}page-active active{% endif %} ">
                     <span class="side-menu-icon toggle-menu-icon">
                         <i class="la la-angle-down"></i>
                     </span>
                     <a href="#"><i class="la la-bus mr-2 text-color-9"></i>Bus</a>
                     <ul class="toggle-drop-menu"
-                        {% if route == "/control/bus/add" or route == "/control/bus/list" %}style="display:block" {% endif %}>
+                        {% if route == "/control/bus/add" or route == "/control/bus/list" or route == "/control/bus/stops" or route == "/control/bus/stop/add" %}style="display:block" {% endif %}>
                         <li class="{% if route == "/control/bus/add" %}page-active {% endif %} ">
-                            <a href="/control/bus/add">Add</a>
+                            <a href="/control/bus/add">Add bus</a>
                         </li>
                         <li class="{% if route == "/control/bus/list" %}page-active {% endif %} "><a
-                                href="/control/bus/list">List</a></li>
+                                href="/control/bus/list">List bus</a></li>
+                        <li class="{% if route == "/control/bus/add" %}page-active {% endif %} ">
+                            <a href="/control/bus/stop/add">Add bus stop</a>
+                        </li>
+                        <li class="{% if route == "/control/bus/stops" %}page-active {% endif %} "><a
+                                href="/control/bus/stops">Bus stop list</a></li>
                     </ul>
                 </li>
                 <li class="{% if route == "/control/routes/add" or route == "/control/routes/list" %}page-active active{% endif %} ">

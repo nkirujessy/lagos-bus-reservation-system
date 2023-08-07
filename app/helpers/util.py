@@ -5,3 +5,5 @@ def app_config():
     config = settings.query.first()
 
     return config
+
+

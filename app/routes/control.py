@@ -16,7 +16,7 @@ from app.models.ticketmodel import ticket
 from app.models.busmodel import bus
 from app.models.transactionmodel import transaction
 from app.models.locationmodel import location
-from app.models.locationmodel import routes as route_location
+from app.models.busstopmodel import busstop
 control_app_route = Blueprint('control_app_route', __name__, template_folder='templates')
 
 
@@ -154,6 +154,15 @@ def control_reservation_search_result():
       if not r_details:
          return  redirect('/404')
     return render_template('dashboard/control/reservations-search-result.html', path=path, route=active_route, result=r_details)
+@control_app_route.route('/control/bus/stops')
+def control_bus_stops():
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    path = 'Bus Stops'
+    active_route = request.path
+    b_list = busstop.query.join(routes).all()
+
+    return render_template('dashboard/control/bus-stop-list.html',bus_list=b_list,path=path, route=active_route)
 @control_app_route.route('/control/bus/list')
 def control_bus_list():
     if not session.get('admin'):
@@ -172,6 +181,74 @@ def control_bus_add():
     active_route = request.path
     dr_list = users.query.filter(users.role=='driver').all()
     return render_template('dashboard/control/bus-add.html', drivers_list=dr_list, path=path, route=active_route)
+
+@control_app_route.route('/control/bus/stop/add')
+def control_bus_stop_add():
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    path = 'Add Bus Stop'
+    active_route = request.path
+    r_list = routes.query.all()
+    return render_template('dashboard/control/bus-stop-add.html', routes_list=r_list, path=path, route=active_route)
+@control_app_route.route('/control/bus/stop/add_process', methods=['POST','GET'])
+def control_bus_stop_add_process():
+    status = False
+    message = 'Error Occurred'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        name = request.form['name']
+        route = request.form['route']
+        lat = request.form['latitude']
+        long = request.form['longitude']
+        address = request.form['address']
+        zip = request.form['zip']
+        landmark = request.form['landmark']
+        desc = request.form['description']
+        status = 1
+        check_name = busstop.query.filter_by(name=name).first()
+
+        if check_name:
+            message = 'Bus Stop with name already exist.'
+            status= False
+        if not name:
+            message = 'Bus Stop name is required'
+            status= False
+        elif not route:
+            message = 'Route is required'
+            status = False
+        elif not lat:
+            message = 'Latitude is required'
+            status = False
+        elif not long:
+            message = 'Longitude is required'
+            status = False
+        elif not address:
+            message = 'Address is required'
+            status = False
+        elif not zip:
+            message = 'Zip is required'
+            status = False
+        elif not landmark:
+            message = 'Landmark is required'
+            status = False
+        elif not desc:
+            message = 'Description is required'
+            status = False
+
+        else:
+            newstop =  busstop(name=name,latitude=lat,landmark=landmark, longitude=long, address=address,zipcode=zip,description=desc,routeId=route,  status=status)
+            db.session.add(newstop)
+            db.session.commit()
+            status = True
+            message = 'Bus Stop created.'
+    elif request == 'POST':
+        message = 'Please fill out the form !'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 @control_app_route.route('/control/bus/add_process', methods=['POST','GET'])
 def control_bus_add_process():
     status = False

@@ -257,6 +257,41 @@ if (window.location.pathname === `/control/bus/add`) {
     }
 
 }
+if (window.location.pathname === `/control/bus/stop/add`) {
+    try {
+
+
+
+        $(`#add-bus-btn`).click(async function(e) {
+            const form = formSerialize("#addbus_stop")
+            console.log(form)
+            const request = await $.ajax({
+                method: `POST`,
+                url: `/control/bus/stop/add_process`,
+                data: form,
+                dataType: `json`,
+                beforeSend: function () {
+                    $(`#add-bus-btn`).addClass(`d-none`)
+                    $(`#add-bus-spinner`).removeClass(`d-none`)
+                },
+                complete: function () {
+                    $(`#add-bus-btn`).removeClass(`d-none`)
+                    $(`#add-bus-spinner`).addClass(`d-none`)
+                }
+            })
+
+            if (request.status) {
+                toastr.success(request.message)
+                $('#addbus_stop').trigger("reset");
+            } else {
+                toastr.error(request.message)
+            }
+        })
+    }catch (error) {
+        toastr.error(error)
+    }
+
+}
 if (window.location.pathname === `/control/reservations/search` || window.location.pathname === `/control/overview`) {
     try {
 

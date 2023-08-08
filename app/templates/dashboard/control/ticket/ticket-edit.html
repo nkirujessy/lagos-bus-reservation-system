@@ -1,0 +1,177 @@
+{% extends "layout/control-layout.html" %}
+
+
+
+{% block content %}
+    <!-- ================================
+        START DASHBOARD AREA
+    ================================= -->
+    <div class="dashboard-main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-box">
+                        <div class="form-title-wrap">
+                            <h3 class="title"><i class="la la-bus mr-2 text-gray"></i>Ticket information</h3>
+                        </div><!-- form-title-wrap -->
+                        <div class="form-content contact-form-action">
+                            <form method="post" class="row" id="editticket">
+                            <input value="{{ result.id }}" hidden name="id">
+                                <div class="col-lg-6 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Ticket Name</label>
+                                        <div class="form-group">
+                                            <span class="la la-tag form-icon"></span>
+                                            <input class="form-control" type="text" name="name" placeholder="Enter Ticket Name"  value="{{ result.name }}">
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-6 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Ticket Fee</label>
+                                        <div class="form-group">
+                                            <span class="la la-money form-icon"></span>
+                                            <input class="form-control" type="tel" value="{{ result.fee }}" name="fee" placeholder="Enter Ticket Fee">
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-3 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Available</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="available">
+                                                {% if result.available == 1 %} selected {% endif %}
+                                                <option {% if result.available == 1 %} selected {% endif %} value="1">Yes</option>
+                                                <option {% if result.available == 2 %} selected {% endif %} value="2">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-3 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Availability Date</label>
+                                        <div class="form-group">
+                                            <span class="la la-calendar form-icon"></span>
+                                            <input
+                                                    class="date-range form-control"
+                                                    type="date"
+                                                    name="availability_date"
+                                                    value="{{ result.availability_date }}"
+                                            />
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-3 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Departure Time</label>
+                                        <div class="form-group">
+                                            <span class="la la-calendar form-icon"></span>
+                                            <input
+                                                    class="date-range form-control"
+                                                    type="datetime-local"
+                                                    name="departure_time"
+                                                    value="{{ result.departure_datetime }}"
+
+                                            />
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-3 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Arrival Time</label>
+                                        <div class="form-group">
+                                            <span class="la la-calendar form-icon"></span>
+                                            <input
+                                                    class="date-range form-control"
+                                                    type="datetime-local"
+                                                    name="arrival_time"
+                                                    value="{{ result.arrival_datetime }}"
+                                            />
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Bus</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="bus">
+                                                <option value="" selected>Choose Bus</option>
+                                                {% for data in bus_list %}
+                                                    <option {% if result.busId == data.id %} selected {% endif %} value="{{ data.id }}">{{ data.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Route</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="route">
+                                                <option value="" selected>Choose Route</option>
+                                                {% for data in routes_list %}
+                                                    <option {% if result.routeId == data.id %} selected {% endif %} value="{{ data.id }}">{{ data.name }} | {{ data.start_route.name }} to {{ data.end_route.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Assign Driver</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="driver">
+                                                <option value="" selected>Choose Driver</option>
+                                                {% for data in drivers_list %}
+                                                    <option {% if result.driverId == data.id %} selected {% endif %} value="{{ data.id }}">{{ data.fullname }} | {{ data.email }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-12 -->
+                                <div class="col-lg-12 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Change Status</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="status">
+                                                <option value="" selected>Choose Statue</option>
+                                                <option {% if result.status == 1 %} selected {% endif %} value="1" selected>Active</option>
+                                                <option {% if result.status == 2 %} selected {% endif %} value="2" >Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-12 -->
+                                <div class="col-lg-12">
+                                    <div class="input-box">
+                                        <label class="label-text mb-0 line-height-20">Ticket Description</label>
+                                        <div class="form-group">
+                                            <span class="la la-pencil form-icon"></span>
+                                            <textarea  class="message-control form-control" name="description" placeholder="Write...         ">{{ result.description }}
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-12 -->
+                                <div class="col-lg-6  submit-box">
+                                    <div class="btn-box pt-3">
+                                        <button type="button" class="theme-btn" id="edit-ticket-btn">Save Changes <i class="la la-arrow-right ml-1"></i></button>
+                                        <button  class="theme-btn d-none" type="button" id="edit-ticket-spinner" disabled>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Loading...
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!-- end form-content -->
+                    </div><!-- end form-box -->
+
+
+                </div><!-- end submit-box -->
+            </div><!-- end col-lg-12 -->
+        </div><!-- end row -->
+    </div><!-- end container-fluid -->
+    <!-- ================================
+        END DASHBOARD AREA
+    ================================= -->
+
+
+{% endblock %}

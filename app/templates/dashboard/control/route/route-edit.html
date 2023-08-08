@@ -1,0 +1,98 @@
+{% extends "layout/control-layout.html" %}
+
+
+
+{% block content %}
+<!-- ================================
+    START DASHBOARD AREA
+================================= -->
+    <div class="dashboard-main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-box">
+                        <div class="form-title-wrap">
+                            <h3 class="title"><i class="la la-bus mr-2 text-gray"></i>Route information</h3>
+                        </div><!-- form-title-wrap -->
+                        <div class="form-content contact-form-action">
+                            <form method="post" class="row" id="editroute">
+                            <input name="id" value="{{ result.id }}" hidden>
+                                <div class="col-lg-12 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Route Name</label>
+                                        <div class="form-group">
+                                            <span class="la la-map-marker form-icon"></span>
+                                            <input class="form-control" type="text" value="{{ result.name }}" name="name" placeholder="Enter Route Name">
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Start Location</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="start_route">
+                                                {% for location in locations %}
+                                                <option {% if result.start_routeId == location.id %} selected {% endif %} value="{{ location.id }}">{{ location.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">End Location</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="end_route">
+                                                {% for location in locations %}
+                                                    <option {% if result.end_routeId == location.id %} selected {% endif %} value="{{ location.id }}">{{ location.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Status</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="status">
+
+
+                                                    <option {% if result.status == 1 %} selected {% endif %} value="1">Active</option>
+                                                    <option {% if result.status == 2 %} selected {% endif %} value="2">Inactive</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-12">
+                                    <div class="input-box">
+                                        <label class="label-text mb-0 line-height-20">Route Description</label>
+                                        <div class="form-group">
+                                            <span class="la la-pencil form-icon"></span>
+                                            <textarea class="message-control form-control" name="description" placeholder="Write...         ">{{ result.description }}</textarea>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-12 -->
+                                <div class="col-lg-6 responsive-column submit-box">
+                                    <div class="btn-box pt-3">
+                                        <button type="button" id="edit-route-btn" class="theme-btn">Save changes <i class="la la-arrow-right ml-1"></i></button>
+                                        <button  class="theme-btn d-none" type="button" id="edit-route-spinner" disabled>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Loading...
+                                        </button>
+                                    </div>
+
+                                </div><!-- end submit-box -->
+                            </form>
+                        </div><!-- end form-content -->
+                    </div><!-- end form-box -->
+                </div><!-- end col-lg-12 -->
+            </div><!-- end row -->
+        </div><!-- end container-fluid -->
+    </div><!-- end dashboard-main-content -->
+<!-- ================================
+    END DASHBOARD AREA
+================================= -->
+
+
+{% endblock %}

@@ -42,7 +42,6 @@ def home():
 
     return render_template('web/index.html', path=path)
 
-
 @app.errorhandler(404)
 def page_not_found(e):
     path = '404'

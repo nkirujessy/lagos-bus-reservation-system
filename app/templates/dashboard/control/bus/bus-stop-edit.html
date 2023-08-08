@@ -1,0 +1,121 @@
+{% extends "layout/control-layout.html" %}
+
+
+
+{% block content %}
+<!-- ================================
+    START DASHBOARD AREA
+================================= -->
+    <div class="dashboard-main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-box">
+                        <div class="form-title-wrap">
+                            <h3 class="title"><i class="la la-bus mr-2 text-gray"></i>Bus Stop information</h3>
+                        </div><!-- form-title-wrap -->
+                        <div class="form-content contact-form-action">
+                            <form method="post" id="addbus_stop" class="row">
+                                <div class="col-lg-6 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Bus Stop Name</label>
+                                        <div class="form-group">
+                                            <span class="la la-tag form-icon"></span>
+                                            <input class="form-control" type="text" name="name" placeholder="Enter Bus Stop Name" >
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+
+
+                                <div class="col-lg-6 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Assign Route</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="route">
+                                                <option value="" selected>Choose Route</option>
+                                                {% for data in routes_list %}
+                                                    <option value="{{ data.id }}">{{ data.name }} | {{ data.start_route.name }} to {{ data.end_route.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-12 -->
+
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Address</label>
+                                        <div class="form-group">
+                                            <span class="la la-address-book form-icon"></span>
+                                            <input class="form-control" type="text" name="address" placeholder="Enter Address" >
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Landmark</label>
+                                        <div class="form-group">
+                                            <span class="la la-landmark form-icon"></span>
+                                            <input class="form-control" type="text" name="landmark" placeholder="Enter Landmark" >
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-4 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Zip code</label>
+                                        <div class="form-group">
+                                            <span class="la la-hashtag form-icon"></span>
+                                            <input class="form-control" type="tel" name="zip" placeholder="Enter Zip" >
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+
+                                <div class="col-lg-6 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Longitude</label>
+                                        <div class="form-group">
+                                            <span class="la la-map-marker form-icon"></span>
+                                            <input class="form-control" type="text" name="latitude" placeholder="Enter Latitude" >
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-6 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Latitude</label>
+                                        <div class="form-group">
+                                            <span class="la la-map-marker-alt form-icon"></span>
+                                            <input class="form-control" type="text" name="longitude" placeholder="Enter Longitude" >
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-6 -->
+                                <div class="col-lg-12">
+                                    <div class="input-box">
+                                        <label class="label-text mb-0 line-height-20">Bus Description</label>
+                                        <div class="form-group">
+                                            <span class="la la-pencil form-icon"></span>
+                                            <textarea class="message-control form-control" name="description" placeholder="Write...         "></textarea>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-12 -->
+                                <div class="col-lg-6  submit-box">
+                                    <div class="btn-box pt-3">
+                                        <button type="button" class="theme-btn " id="add-bus-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
+                                        <button  class="theme-btn d-none" id="add-bus-spinner" type="button" disabled>
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            Loading...
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!-- end form-content -->
+                    </div><!-- end form-box -->
+
+                </div><!-- end col-lg-12 -->
+            </div><!-- end row -->
+        </div><!-- end container-fluid -->
+    </div><!-- end dashboard-main-content -->
+<!-- ================================
+    END DASHBOARD AREA
+================================= -->
+
+
+{% endblock %}

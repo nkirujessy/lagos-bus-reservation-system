@@ -15,6 +15,10 @@ class settings(db.Model,SerializerMixin):
     id = db.Column(db.String(36), primary_key=True, default=uuid.uuid4)
     appname = db.Column(db.String(225), nullable=False)
     currency = db.Column(db.String(225), nullable=False)
+    email = db.Column(db.String(225), nullable=False)
+    password = db.Column(db.String(225), nullable=False)
+    host = db.Column(db.String(225), nullable=False)
+    port = db.Column(db.Integer, nullable=False)
 
 
 

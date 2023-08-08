@@ -33,6 +33,7 @@
 <!-- start cssload-loader -->
 {% include "layout/preloader.html" %}
 
+{% include "auth/signup.html" %}
 
 <!-- ================================
        START DASHBOARD NAV
@@ -46,7 +47,7 @@
             <div class="d-flex align-items-center">
                 <div class="author-bio">
                     <h4 class="author__title">{{ session.fullname }}</h4>
-                    <span class="author__meta">Welcome to Admin Panel</span>
+                    <span class="author__meta">{% if session.admin %}Welcome to Admin Panel {% endif %}</span>
                 </div>
             </div>
         </div>
@@ -54,6 +55,14 @@
             <ul class="sidebar-menu toggle-menu list-items">
                 <li class="{% if route == "/control/overview" %}page-active {% endif %} "><a href="/control/overview"><i
                         class="la la-dashboard mr-2"></i>Overview</a></li>
+                {% if session.driver and not session.admin %}
+
+
+                    <li class="{% if route == "/control/driver/bus/list" %} page-active {% endif %} "><a href="/control/driver/bus/list"><i class="la la-bus mr-2 text-color-9"></i>My Bus</a></li>
+
+
+                    <li class="{% if route == "/control/trips/list" %} page-active {% endif %} "><a href="/control/trips/list"><i class="la la-route mr-2 text-color-6"></i>My Trips</a></li>
+                {% endif %}
             {% if session.driver or session.admin %}
                 <li class="{% if route == "/control/reservations/list" or route == "/control/reservations/search"  %}page-active active{% endif %} ">
                     <span class="side-menu-icon toggle-menu-icon">
@@ -61,11 +70,12 @@
                     </span>
                     <a href="#"><i class="la la-calendar-check mr-2 text-color-11"></i>Reservations</a>
                     <ul class="toggle-drop-menu" {% if route == "/control/reservations/list" or route == "/control/reservations/search" or route == "/control/reservations/search-result"  %}style="display:block" {% endif %}>
-                        <li class="{% if route == "/control/ticket/list" %} page-active {% endif %} "><a href="/control/reservations/list">List</a></li>
+                        <li class="{% if route == "/control/reservation/list" %} page-active {% endif %} "><a href="/control/reservations/list">List</a></li>
                         <li class="{% if route == "/control/ticket/search" %} page-active {% endif %} "><a href="/control/reservations/search">Search</a></li>
                     </ul>
                 </li>
             {% endif %}
+
                 {% if  session.admin %}
                 <li class="{% if route == "/control/bus/stop/add" or route == "/control/bus/add" or route == "/control/bus/list" or route == "/control/bus/stops" %}page-active active{% endif %} ">
                     <span class="side-menu-icon toggle-menu-icon">

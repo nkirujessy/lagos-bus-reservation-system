@@ -24,6 +24,8 @@ class users(db.Model,SerializerMixin):
     ticket = db.relationship(ticket, backref='users', lazy=True)
     bus = db.relationship(bus, backref='users', lazy=True)
     role = db.Column(db.String(225), nullable=False)
+    code = db.Column(db.String(225), nullable=True)
+    code_status = db.Column(db.Integer, nullable=True)
     status = db.Column(db.Integer, nullable=False)
     created = db.Column(db.DateTime(timezone=True), server_default=func.now())
 

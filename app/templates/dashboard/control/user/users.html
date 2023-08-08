@@ -13,7 +13,9 @@
                     <div class="form-box">
                         <div class="form-title-wrap d-flex justify-content-between align-items-center">
                             <h3 class="title">Fetched {{ users_list|length }} {{ path }} </h3>
-                            <button class="theme-btn theme-btn-small">Create User <small>(Admin or Driver)</small></button>
+                            <button
+                                    data-toggle="modal"
+                                    data-target="#signupPopupForm" class="theme-btn theme-btn-small">Create User <small>(Admin or Driver)</small></button>
                         </div>
 
                         <div class="form-content">
@@ -49,8 +51,7 @@
                                                     <span class="badge {% if user.status == 1 %}badge-success {% else %} badge-danger {% endif %}text-white py-1 px-2"> {% if user.status ==1 %}Active {% else %}Inactive {% endif %}</span></td>
                                                 <td>
                                                     <div class="table-content">
-                                                        <a href="#" class="theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Edit"><i class="la la-pencil"></i></a>
-                                                        <a href="#" class="theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Delete"><i class="la la-trash"></i></a>
+                                                        <button type="button" data-id="{{ user.id }}"  class="delete_user theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Delete"><i class="la la-trash"></i></button>
                                                     </div>
                                                 </td>
                                             </tr>

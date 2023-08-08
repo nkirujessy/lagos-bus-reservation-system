@@ -37,7 +37,7 @@
                                         <td><span class="badge {% if route.status == 1 %}badge-success {% else %} badge-danger {% endif %}text-white py-1 px-2">{% if route.status == 1 %}Active {% else %}Inactive {% endif %}</span></td>
                                         <td>
                                             <div class="table-content">
-                                                <a href="#" class="theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Edit"><i class="la la-edit"></i></a>
+                                                <a href="/control/routes/edit?id={{ route.id }}" class="theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Edit"><i class="la la-edit"></i></a>
                                             </div>
                                         </td>
                                     </tr>

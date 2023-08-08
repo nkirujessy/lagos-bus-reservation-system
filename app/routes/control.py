@@ -309,8 +309,9 @@ def control_ticket_list():
     active_route = request.path
     # t_list = ticket.query.all()
     t_list = ticket.query.join(users).join(bus).join(routes).all()
-    app.logger.info('Ticket Lit')
-    return render_template('dashboard/control/ticket-list.html',ticket_list=t_list, path=path,route=active_route)
+    currency=app_config().currency
+
+    return render_template('dashboard/control/ticket-list.html',ticket_list=t_list, path=path,route=active_route, currency=currency)
 @control_app_route.route('/control/ticket/add')
 def control_ticket_add():
     if not session.get('admin'):
@@ -322,6 +323,22 @@ def control_ticket_add():
     dr_list = users.query.filter(users.role=='driver').all()
     return render_template('dashboard/control/ticket-add.html',drivers_list=dr_list, bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
 
+@control_app_route.route('/control/ticket/edit', methods=['POST','GET'])
+def control_ticket_details():
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    path = 'Edit Ticket'
+    active_route = request.path
+    id = request.args.get('id')
+    routes_list = routes.query.filter_by(status=1).all()
+    bus_list = bus.query.filter_by(status=1).all()
+    dr_list = users.query.filter(users.role=='driver').all()
+    t_list = ticket.query.filter(ticket.id==id).join(users).join(bus).join(routes).first()
+
+    if not t_list:
+        return redirect('/control/ticket/list')
+
+    return render_template('dashboard/control/ticket-edit.html',drivers_list=dr_list, bus_list=bus_list,routes_list=routes_list, result=t_list, path=path, route=active_route)
 @control_app_route.route('/control/ticket/add_process', methods=['POST','GET'])
 def control_ticket_add_process():
     status = False
@@ -390,6 +407,86 @@ def control_ticket_add_process():
         'status': status
     })
 
+@control_app_route.route('/control/ticket/edit_process', methods=['POST','GET'])
+def control_ticket_edit_process():
+    status = False
+    message = 'Error Occurred'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        fee = request.form['fee']
+        available = request.form['available']
+        avail_date = request.form['availability_date']
+        dept = request.form['departure_time']
+        arrival = request.form['arrival_time']
+        bus = request.form['bus']
+        driver = request.form['driver']
+        route = request.form['route']
+        desc = request.form['description']
+        stat = request.form['status']
+
+        if not name:
+            message = 'Ticket name is required'
+            status= False
+        elif not fee:
+            message = 'Fee is required'
+            status = False
+        elif not int(fee):
+            message = 'Fee should be number'
+            status = False
+        elif not available:
+            message = 'Is ticket available should be selected'
+            status = False
+        elif not avail_date:
+            message = 'Availability date is required'
+            status = False
+        elif not dept:
+            message = 'Departure time is required'
+            status = False
+        elif not arrival:
+            message = 'Arrival time is required'
+            status = False
+        elif not bus:
+            message = 'Bus is required'
+            status = False
+        elif not driver:
+            message = 'Driver is required'
+            status = False
+        elif not route:
+            message = 'Route is required'
+            status = False
+        elif not desc:
+            message = 'Description is required'
+            status = False
+        elif not stat:
+            message = 'Status is required'
+            status = False
+
+
+        else:
+            data = ticket.query.filter(ticket.id==id).first()
+            data.name=name
+            data.fee=fee
+            data.available=available
+            data.availability_date=avail_date
+            data.departure_datetime=dept
+            data.arrival_datetime=arrival
+            data.busId= bus
+            data.driverId=driver
+            data.routeId=route
+            data.description=desc
+            data.status=stat
+
+            db.session.commit()
+            status = True
+            message = 'Ticket created.'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 
 @control_app_route.route('/control/routes/list')
 def control_routes_list():
@@ -400,6 +497,68 @@ def control_routes_list():
     r_list = routes.query.all()
     app.logger.info(r_list)
     return render_template('dashboard/control/route-list.html' ,route_list=r_list, path=path, route=active_route)
+
+@control_app_route.route('/control/routes/edit')
+def control_routes_edit():
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    path = 'Routes Edit'
+    active_route = request.path
+    id = request.args.get('id')
+    r_list = routes.query.filter(routes.id==id).first()
+
+    locations = location.query.all()
+    if not r_list:
+       return redirect('/control/routes/list')
+
+    return render_template('dashboard/control/route-edit.html' ,result=r_list, locations=locations,path=path, route=active_route)
+@control_app_route.route('/control/routes/edit_process', methods=['POST','GET'])
+def control_route_edit_process():
+    status = False
+    message = 'Error Occurred'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        start = request.form['start_route']
+        end = request.form['end_route']
+        desc = request.form['description']
+        stat = request.form['status']
+
+        if not name:
+            message = 'Route name is required'
+            status= False
+        elif not start:
+            message = 'Start route is required'
+            status = False
+        elif not end:
+            message = 'End route is required'
+            status = False
+        elif not desc:
+            message = 'Description is required'
+            status = False
+        elif not stat:
+            message = 'Status is required'
+            status = False
+
+
+        else:
+            data = routes.query.filter(routes.id==id).first()
+            data.name=name
+            data.start_routeId=start
+            data.end_routeId=end
+            data.description=desc
+            data.status=stat
+
+            db.session.commit()
+            status = True
+            message = 'Route updated.'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 @control_app_route.route('/control/routes/add')
 def control_routes_add():
     if not session.get('admin'):
@@ -470,8 +629,84 @@ def control_settings():
     return render_template('dashboard/control/settings.html', path=path, route=active_route)
 @control_app_route.route('/control/profile')
 def control_profile():
-    if not session.get('admin'):
-        return redirect('/admin/login')
+    if not session.get('admin') and not session.get('driver'):
+        return redirect('/')
     path = 'Profile'
     active_route = request.path
-    return render_template('dashboard/control/profile.html', path=path, route=active_route)
+    user = users.query.filter(users.id==session.get('id')).first()
+    return render_template('dashboard/control/profile.html', path=path, route=active_route, user=user)
+
+@control_app_route.route('/control/user/delete', methods=['GET'])
+def control_user_delete():
+    if not session.get('admin') :
+        return redirect('/')
+    message='Error Occurred'
+    status= False
+    if request.method == 'GET':
+        id = request.args.get('id')
+
+        user = users.query.filter(users.id==id).first()
+
+        if not user:
+            message='User not found'
+            status= False
+        else:
+            db.session.delete(user)
+            db.session.commit()
+            message='User Deleted'
+            status= True
+
+    return jsonify({
+        'message':message,
+        'status':status,
+    })
+
+
+@control_app_route.route('/control/ticket/delete', methods=['GET'])
+def control_ticket_delete():
+    if not session.get('admin') :
+        return redirect('/')
+    message='Error Occurred'
+    status= False
+    if request.method == 'GET':
+        id = request.args.get('id')
+
+        data = ticket.query.filter(ticket.id==id).first()
+
+        if not data:
+            message='Ticket not found'
+            status= False
+        else:
+            db.session.delete(data)
+            db.session.commit()
+            message='Ticket Deleted'
+            status= True
+
+    return jsonify({
+        'message':message,
+        'status':status,
+    })
+# Driver
+
+
+@control_app_route.route('/control/driver/bus/list')
+def control_driver_bus_list():
+    if not  session.get('driver'):
+        return redirect('/driver/login')
+    path = 'My Bus'
+    active_route = request.path
+    user = session.get('id')
+    b_list = bus.query.filter(bus.driverId==user).join(users).all()
+
+    return render_template('dashboard/control/driver-bus-list.html',bus_list=b_list,path=path, route=active_route)
+
+@control_app_route.route('/control/trips/list')
+def control_driver_trips_list():
+    if not session.get('driver'):
+        return redirect('/driver/login')
+    path = 'My Trips'
+    active_route = request.path
+    user = session.get('id')
+    t_list = ticket.query.filter(ticket.driverId==user).join(users).all()
+
+    return render_template('dashboard/control/driver-trip-list.html',trip_list=t_list,path=path, route=active_route)

@@ -15,28 +15,31 @@
                             <div class="d-flex align-items-center">
                                 <i class="la la-check icon-element flex-shrink-0 mr-3 ml-0"></i>
                                 <div>
-                                    <h3 class="title pb-1">Thanks Alex!</h3>
-                                    <h3 class="title">Your booking in EnVision Hotel Boston is confirmed.</h3>
+                                    <h3 class="title pb-1">{{ result.users.fullname }}</h3>
+                                    <h3 class="title">Your reservation for {{ result.ticket.routes.start_route.name }} to {{ result.ticket.routes.end_route.name }} is confirmed.</h3>
                                 </div>
                             </div>
                             <ul class="list-items py-4">
-                                <li><i class="la la-check text-success mr-2"></i><strong class="text-black">EnVision Hotel Boston</strong> is Expecting you on <strong class="text-black">01 june</strong></li>
-                                <li><i class="la la-check text-success mr-2"></i>Your <strong class="text-black">payment</strong> will be handled by EnVision Hotel Boston, the <strong class="color-text-2">'Payment'</strong> section below has more details</li>
-                                <li><i class="la la-check text-success mr-2"></i>Make changes to your booking or ask the properly a question in just a few clicks</li>
+                                <li><i class="la la-check text-success mr-2"></i><strong class="text-black">Your journey</strong> begins on <strong class="text-black">{{ result.ticket.departure_datetime }}</strong></li>
                             </ul>
-                            <h3 class="title"><a href="#" class="text-black">EnVision Hotel Boston</a></h3>
-                            <p>New York City, NY, USA</p>
-                            <p class="py-1"><a href="#" class="text-color">Click for directions on Google maps <i class="la la-arrow-right"></i></a></p>
-                            <p><strong class="text-black mr-1">Phone:</strong>+ 00 222 44 5678</p>
+                            <h3 class="title">Your Reservation</h3>
+                            {% for stops in result.ticket.routes.busstop  %}
+                            <p>{{ stops.name }}</p>
+                                <p class="py-1"><a href="https://www.google.com/maps/place/{{ result.ticket.routes.end_route.name }},+Lagos" class="text-color">Click for directions on Google maps <i class="la la-arrow-right"></i></a></p>
+                            {% endfor %}
+
                             <ul class="list-items list-items-3 list-items-4 py-4">
-                                <li><span class="text-black font-weight-bold">Your reservation</span>2 Nights, 1 Room</li>
-                                <li><span class="text-black font-weight-bold">Check-in</span>Thu 30 Mar, 2020</li>
-                                <li><span class="text-black font-weight-bold">Check-out</span>Sat 01 Jun, 2020</li>
-                                <li><span class="text-black font-weight-bold">Prepayment</span>You will be charged a prepayment of the total price at any time.</li>
-                                <li><span class="text-black font-weight-bold">Cancellation cost</span>From now on: USD 34</li>
+                                <li><span class="text-black font-weight-bold">From</span>{{ result.ticket.routes.start_route.name }}</li>
+                                <li><span class="text-black font-weight-bold">Destination</span>{{ result.ticket.routes.end_route.name }}</li>
+                                <li><span class="text-black font-weight-bold">Departure</span>{{ result.ticket.departure_datetime }}</li>
+                                <li><span class="text-black font-weight-bold">Arrival</span>{{ result.ticket.arrival_datetime }}</li>
+                                <li><span class="text-black font-weight-bold">Passengers</span>{{ result.adult }} adult(s), {{ result.children }} child(ren)</li>
+                                 {% for transact in result.transaction %}
+                                <li><span class="text-black font-weight-bold">Fee</span>{{ currency }}{{ transact.amount }}</li>
+                                {% endfor %}
                             </ul>
                             <div class="btn-box">
-                                <a href="#" class="theme-btn border-0 text-white bg-7">Cancel your booking</a>
+                                <button data-id="{{ result.id }}"  class="cancel_reservation theme-btn border-0 text-white bg-7">Cancel your booking</button>
                             </div>
                         </div><!-- end card-item -->
                     </div>

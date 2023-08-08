@@ -87,7 +87,7 @@
                     <div class="form-content">
                         <div class="card-item shadow-none radius-none mb-0">
                             <div class="card-img pb-4">
-                                <div class="col-lg-4">
+                                <div class="col-lg-12">
                                     <div class="map-container" >
                                         <div id="bus-stop-map1" style=" height: 300px" class="map"></div>
                                     </div>
@@ -100,41 +100,43 @@
                                         <h3 class="card-title">{{ tickets.routes.start_route.name }} to {{ tickets.routes.end_route.name }}</h3>
                                     </div>
                                     <div>
-                                        <a href="room-details.html" class="btn ml-1"><i class="la la-edit" tickets-toggle="tooltip" tickets-placement="top" title="Edit"></i></a>
+                                        <a href="/" class="btn ml-1"><i class="la la-edit" data-toggle="tooltip" data-placement="top" title="Change"></i></a>
                                     </div>
                                 </div>
                                 <div class="section-block"></div>
                                 <ul class="list-items list-items-2 list-items-flush py-2">
-                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>From</span>12 May 2020 7:40am</li>
-                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>To</span>16 May 2020 8:40am</li>
+                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>Availability</span>{{ tickets.availability_date }}</li>
+                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>Departure Time</span>{{ tickets.departure_datetime }}</li>
+                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>Arrival Time</span>{{ tickets.arrival_datetim }}</li>
                                 </ul>
                                 <h3 class="card-title pb-3">Order Details</h3>
                                 <div class="section-block"></div>
                                 <ul class="list-items list-items-2 py-3">
-                                    <li><span>Room Type:</span>Luxury</li>
-                                    <li><span>Night:</span>1</li>
-                                    <li><span>Room:</span>1</li>
-                                    <li><span>Guests:</span>2 adults</li>
-                                    <li><span>Extra Services:</span>Cleaning, Laundry, Breakfast</li>
+                                    <li><span>Bus Number</span>{{ tickets.bus.name }}</li>
+
+                                    {% for stops in tickets.routes.busstop %}
+                                    <li><span>Bus Stop</span>{{ stops.name }}</li>
+                                    {% endfor %}
+                                    <li><span>Passengers:</span>{{ adult }} adults | {{ children }} children</li>
                                 </ul>
                                 <div class="section-block"></div>
                                 <ul class="list-items list-items-2 pt-3">
-                                    <li><span>Sub Total:</span>$240</li>
-                                    <li><span>Taxes And Fees:</span>$5</li>
-                                    <li><span>Total Price:</span>$245</li>
+                                     {% set total =  (adult|int + children|int) * tickets.fee|int %}
+                                    <li><span>Sub Total:</span>{{ currency }}{{ total }}</li>
+                                    <li><span>Total Price:</span>{{ currency }}{{ total }}</li>
                                 </ul>
                             </div>
                             <form method="post" class="py-3">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="btn-box">
-                                            <button class="theme-btn w-100" type="button" id="reserve-btn">Continue</button>
-                                            <button class="theme-btn w-100 d-none" type="button"
-                                                    id="spinner-btn-reserve" disabled>
-                                                    <span class="spinner-border spinner-border-sm" role="status"
-                                                          aria-hidden="true"></span>
-                                                Loading...
-                                            </button>
+                                            <a href="/reserve?ticket={{ tickets.id }}&adult={{ adult }}&children={{ children }}&departure={{ departure }}" class="theme-btn w-100 text-center"  id="reserve-btn">Continue</a>
+{#                                            <button class="theme-btn w-100 d-none" type="button"#}
+{#                                                    id="spinner-btn-reserve" disabled>#}
+{#                                                    <span class="spinner-border spinner-border-sm" role="status"#}
+{#                                                          aria-hidden="true"></span>#}
+{#                                                Loading...#}
+{#                                            </button>#}
                                         </div>
                                     </div><!-- end col-lg-12 -->
                                 </div>

@@ -1,6 +1,12 @@
 # user
 from flask import session, redirect, render_template, Blueprint, request
 
+from app.helpers.util import app_config
+from app.models.routemodel import routes
+from app.models.settingsmodel import settings
+from app.models.ticketmodel import ticket
+from app.models.usersmodel import users
+
 user_app_route = Blueprint('user_app_route', __name__,template_folder='templates')
 from app import app, db
 
@@ -28,8 +34,9 @@ def user_reservation():
     path = "Reservations"
     active_route = request.path
     user = session.get('id')
-    reservations = reservation.query.filter_by(userId=user).all()
-    return render_template("dashboard/user/user-reservations.html",reserve_list=reservations,route=active_route, path=path)
+    reservations = reservation.query.filter(reservation.userId == user).join(ticket).all()
+    currency= app_config().currency
+    return render_template("dashboard/user/user-reservations.html",reserve_list=reservations,route=active_route, path=path, currency=currency)
 
 @user_app_route.route("/app/profile")
 def user_profile():
@@ -45,4 +52,5 @@ def user_account():
         return redirect('/')
     path = "Account"
     active_route = request.path
-    return render_template("dashboard/user/user-dashboard-settings.html",route=active_route, path=path)
+    user = users.query.filter(users.id==session.get('id')).first()
+    return render_template("dashboard/user/user-dashboard-settings.html",route=active_route, path=path, user=user)

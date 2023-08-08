@@ -14,7 +14,6 @@
                         <h5 class="modal-title title" id="exampleModalLongTitle">
                             Sign Up
                         </h5>
-                        <p class="font-size-14">Welcome Create a New Account</p>
                     </div>
                     <button
                             type="button"
@@ -53,6 +52,18 @@
                                     />
                                 </div>
                             </div>
+                            {% if session.admin %}
+                                <div class="input-box">
+                                    <label class="label-text">Assign Role</label>
+                                    <div class="form-group select-contain w-100">
+                                        <select class="select-contain-select" name="role">
+                                            <option value="" selected>Choose Role</option>
+                                            <option value="admin">Admin</option>
+                                            <option value="driver">Driver</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
                             <!-- end input-box -->
                             <div class="input-box">
                                 <label class="label-text">Password</label>

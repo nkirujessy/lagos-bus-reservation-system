@@ -49,8 +49,7 @@
                                         <td><span class="badge {% if reservation.status == 1 %}badge-success {% elif reservation.status == 2%} badge-warning {% else %} badge-danger {% endif %} text-white py-1 px-2">{% if reservation.status == 1 %}Active {% elif reservation.status == 2%} Pending {% else %} Cancelled {% endif %}</span></td>
                                         <td>
                                             <div class="table-content d-flex justify-content-between">
-                                                <a href="#" class="theme-btn theme-btn-small mr-2" data-toggle="tooltip" data-placement="top" title="Cancel"><i class="la la-remove"></i></a>
-                                                <a href="#" class="btn btn-danger btn-small" data-toggle="tooltip" data-placement="top" title="Delete"><i class="la la-trash"></i></a>
+                                                <button type="button" data-id="{{ reservation.id }}"  class="cancel_reservation btn theme-btn-small btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Cancel"><i class="la la-remove"></i></button>
                                             </div>
                                         </td>
                                     </tr>

@@ -21,7 +21,7 @@
                                         <label class="label-text">Bus Stop Name</label>
                                         <div class="form-group">
                                             <span class="la la-tag form-icon"></span>
-                                            <input class="form-control" type="text" name="name" placeholder="Enter Bus Stop Name" >
+                                            <input class="form-control" value="{{ result.name }}" type="text" name="name" placeholder="Enter Bus Stop Name" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -34,7 +34,7 @@
                                             <select class="select-contain-select" name="route">
                                                 <option value="" selected>Choose Route</option>
                                                 {% for data in routes_list %}
-                                                    <option value="{{ data.id }}">{{ data.name }} | {{ data.start_route.name }} to {{ data.end_route.name }}</option>
+                                                    <option {% if result.routeId == data.id %} selected {% endif %} value="{{ data.id }}">{{ data.name }} | {{ data.start_route.name }} to {{ data.end_route.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -46,7 +46,7 @@
                                         <label class="label-text">Address</label>
                                         <div class="form-group">
                                             <span class="la la-address-book form-icon"></span>
-                                            <input class="form-control" type="text" name="address" placeholder="Enter Address" >
+                                            <input class="form-control" type="text" value="{{ result.address }}" name="address" placeholder="Enter Address" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -55,7 +55,7 @@
                                         <label class="label-text">Landmark</label>
                                         <div class="form-group">
                                             <span class="la la-landmark form-icon"></span>
-                                            <input class="form-control" type="text" name="landmark" placeholder="Enter Landmark" >
+                                            <input class="form-control" value="{{ result.landmark }}" type="text" name="landmark" placeholder="Enter Landmark" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -64,26 +64,26 @@
                                         <label class="label-text">Zip code</label>
                                         <div class="form-group">
                                             <span class="la la-hashtag form-icon"></span>
-                                            <input class="form-control" type="tel" name="zip" placeholder="Enter Zip" >
+                                            <input class="form-control" value="{{ result.zip }}" type="tel" name="zip" placeholder="Enter Zip" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
 
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
-                                        <label class="label-text">Longitude</label>
+                                        <label class="label-text">Latitude</label>
                                         <div class="form-group">
                                             <span class="la la-map-marker form-icon"></span>
-                                            <input class="form-control" type="text" name="latitude" placeholder="Enter Latitude" >
+                                            <input class="form-control" value="{{ result.latitude }}" type="text" name="latitude" placeholder="Enter Latitude" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
-                                        <label class="label-text">Latitude</label>
+                                        <label class="label-text">Longitude</label>
                                         <div class="form-group">
                                             <span class="la la-map-marker-alt form-icon"></span>
-                                            <input class="form-control" type="text" name="longitude" placeholder="Enter Longitude" >
+                                            <input class="form-control" value="{{ result.longitude }}" type="text" name="longitude" placeholder="Enter Longitude" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -92,14 +92,14 @@
                                         <label class="label-text mb-0 line-height-20">Bus Description</label>
                                         <div class="form-group">
                                             <span class="la la-pencil form-icon"></span>
-                                            <textarea class="message-control form-control" name="description" placeholder="Write...         "></textarea>
+                                            <textarea class="message-control form-control" name="description" placeholder="Write...         ">{{ result.description }}</textarea>
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-12 -->
                                 <div class="col-lg-6  submit-box">
                                     <div class="btn-box pt-3">
-                                        <button type="button" class="theme-btn " id="add-bus-btn">Continue <i class="la la-arrow-right ml-1"></i></button>
-                                        <button  class="theme-btn d-none" id="add-bus-spinner" type="button" disabled>
+                                        <button type="button" class="theme-btn " id="edit-bus-btn">Save changes <i class="la la-arrow-right ml-1"></i></button>
+                                        <button  class="theme-btn d-none" id="edit-bus-spinner" type="button" disabled>
                                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             Loading...
                                         </button>

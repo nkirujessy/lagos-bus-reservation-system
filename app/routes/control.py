@@ -98,7 +98,7 @@ def control_reservations():
     path = 'Reservations'
     active_route = request.path
     r_list = reservation.query.join(users).all()
-    return render_template('dashboard/control/reservations.html', reserve_list=r_list,path=path, route=active_route)
+    return render_template('dashboard/control/reservation/reservations.html', reserve_list=r_list,path=path, route=active_route)
 @control_app_route.route('/control/reservations/search')
 def control_reservation_search():
     if not session.get('admin') and not session.get('driver'):
@@ -106,7 +106,7 @@ def control_reservation_search():
     path = 'Search Reservation'
     active_route = request.path
 
-    return render_template('dashboard/control/reservations-search.html', path=path, route=active_route)
+    return render_template('dashboard/control/reservation/reservations-search.html', path=path, route=active_route)
 
 @control_app_route.route('/control/reservations/search_process', methods=['POST','GET'])
 def control_reservation_search_process():
@@ -153,7 +153,7 @@ def control_reservation_search_result():
       r_details = reservation.query.filter(reservation.reservation_number==number).join(users).join(ticket).first()
       if not r_details:
          return  redirect('/404')
-    return render_template('dashboard/control/reservations-search-result.html', path=path, route=active_route, result=r_details)
+    return render_template('dashboard/control/reservation/reservations-search-result.html', path=path, route=active_route, result=r_details)
 @control_app_route.route('/control/bus/stops')
 def control_bus_stops():
     if not session.get('admin'):
@@ -162,7 +162,7 @@ def control_bus_stops():
     active_route = request.path
     b_list = busstop.query.join(routes).all()
 
-    return render_template('dashboard/control/bus-stop-list.html',bus_list=b_list,path=path, route=active_route)
+    return render_template('dashboard/control/bus/bus-stop-list.html',bus_list=b_list,path=path, route=active_route)
 @control_app_route.route('/control/bus/list')
 def control_bus_list():
     if not session.get('admin'):
@@ -171,7 +171,7 @@ def control_bus_list():
     active_route = request.path
     b_list = bus.query.join(users).all()
 
-    return render_template('dashboard/control/bus-list.html',bus_list=b_list,path=path, route=active_route)
+    return render_template('dashboard/control/bus/bus-list.html',bus_list=b_list,path=path, route=active_route)
 
 @control_app_route.route('/control/bus/add')
 def control_bus_add():
@@ -180,7 +180,7 @@ def control_bus_add():
     path = 'Add Bus'
     active_route = request.path
     dr_list = users.query.filter(users.role=='driver').all()
-    return render_template('dashboard/control/bus-add.html', drivers_list=dr_list, path=path, route=active_route)
+    return render_template('dashboard/control/bus/bus-add.html', drivers_list=dr_list, path=path, route=active_route)
 
 @control_app_route.route('/control/bus/stop/add')
 def control_bus_stop_add():
@@ -189,7 +189,7 @@ def control_bus_stop_add():
     path = 'Add Bus Stop'
     active_route = request.path
     r_list = routes.query.all()
-    return render_template('dashboard/control/bus-stop-add.html', routes_list=r_list, path=path, route=active_route)
+    return render_template('dashboard/control/bus/bus-stop-add.html', routes_list=r_list, path=path, route=active_route)
 @control_app_route.route('/control/bus/stop/add_process', methods=['POST','GET'])
 def control_bus_stop_add_process():
     status = False
@@ -311,7 +311,7 @@ def control_ticket_list():
     t_list = ticket.query.join(users).join(bus).join(routes).all()
     currency=app_config().currency
 
-    return render_template('dashboard/control/ticket-list.html',ticket_list=t_list, path=path,route=active_route, currency=currency)
+    return render_template('dashboard/control/ticket/ticket-list.html',ticket_list=t_list, path=path,route=active_route, currency=currency)
 @control_app_route.route('/control/ticket/add')
 def control_ticket_add():
     if not session.get('admin'):
@@ -321,7 +321,7 @@ def control_ticket_add():
     routes_list = routes.query.filter_by(status=1).all()
     bus_list = bus.query.filter_by(status=1).all()
     dr_list = users.query.filter(users.role=='driver').all()
-    return render_template('dashboard/control/ticket-add.html',drivers_list=dr_list, bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
+    return render_template('dashboard/control/ticket/ticket-add.html',drivers_list=dr_list, bus_list=bus_list,routes_list=routes_list, path=path, route=active_route)
 
 @control_app_route.route('/control/ticket/edit', methods=['POST','GET'])
 def control_ticket_details():
@@ -338,7 +338,7 @@ def control_ticket_details():
     if not t_list:
         return redirect('/control/ticket/list')
 
-    return render_template('dashboard/control/ticket-edit.html',drivers_list=dr_list, bus_list=bus_list,routes_list=routes_list, result=t_list, path=path, route=active_route)
+    return render_template('dashboard/control/ticket/ticket-edit.html',drivers_list=dr_list, bus_list=bus_list,routes_list=routes_list, result=t_list, path=path, route=active_route)
 @control_app_route.route('/control/ticket/add_process', methods=['POST','GET'])
 def control_ticket_add_process():
     status = False
@@ -496,7 +496,7 @@ def control_routes_list():
     active_route = request.path
     r_list = routes.query.all()
     app.logger.info(r_list)
-    return render_template('dashboard/control/route-list.html' ,route_list=r_list, path=path, route=active_route)
+    return render_template('dashboard/control/route/route-list.html' ,route_list=r_list, path=path, route=active_route)
 
 @control_app_route.route('/control/routes/edit')
 def control_routes_edit():
@@ -511,7 +511,7 @@ def control_routes_edit():
     if not r_list:
        return redirect('/control/routes/list')
 
-    return render_template('dashboard/control/route-edit.html' ,result=r_list, locations=locations,path=path, route=active_route)
+    return render_template('dashboard/control/route/route-edit.html' ,result=r_list, locations=locations,path=path, route=active_route)
 @control_app_route.route('/control/routes/edit_process', methods=['POST','GET'])
 def control_route_edit_process():
     status = False
@@ -566,7 +566,7 @@ def control_routes_add():
     path = 'Add Route'
     active_route = request.path
     locations = location.query.all()
-    return render_template('dashboard/control/route-add.html', locations=locations,path=path, route=active_route)
+    return render_template('dashboard/control/route/route-add.html', locations=locations,path=path, route=active_route)
 @control_app_route.route('/control/route/add_process', methods=['POST','GET'])
 def control_route_add_process():
     status = False
@@ -611,7 +611,7 @@ def control_users():
     path = 'Users'
     active_route = request.path
     u_list =  users.query.all()
-    return render_template('dashboard/control/users.html', users_list=u_list, path=path, route=active_route)
+    return render_template('dashboard/control/user/users.html', users_list=u_list, path=path, route=active_route)
 @control_app_route.route('/control/transactions')
 def control_transactions():
     if not session.get('admin'):
@@ -698,7 +698,7 @@ def control_driver_bus_list():
     user = session.get('id')
     b_list = bus.query.filter(bus.driverId==user).join(users).all()
 
-    return render_template('dashboard/control/driver-bus-list.html',bus_list=b_list,path=path, route=active_route)
+    return render_template('dashboard/control/bus/driver-bus-list.html',bus_list=b_list,path=path, route=active_route)
 
 @control_app_route.route('/control/trips/list')
 def control_driver_trips_list():
@@ -709,4 +709,4 @@ def control_driver_trips_list():
     user = session.get('id')
     t_list = ticket.query.filter(ticket.driverId==user).join(users).all()
 
-    return render_template('dashboard/control/driver-trip-list.html',trip_list=t_list,path=path, route=active_route)
+    return render_template('dashboard/control/reservation/driver-trip-list.html',trip_list=t_list,path=path, route=active_route)

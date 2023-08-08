@@ -1,6 +1,10 @@
 from flask import render_template, Blueprint, request, redirect, session, jsonify
 
 import uuid
+
+from sqlalchemy import func
+
+import app
 from app import db
 from app.helpers.util import app_config
 
@@ -43,16 +47,19 @@ def reserve_bus():
      reference = uuid.uuid4()
      user = session.get("id")
      tickets = ticket.query.filter(ticket.id==ticketId).join(routes).join(bus).first()
+
      if(not tickets):
         return redirect("/404")
      else:
         amount = (int(adult) + int(children)) * int(tickets.fee)
+        init_capacity=(int(adult) + int(children))
         reserve= reservation(userId=user,ticketId=ticketId, reservation_number=reservation_number, status=1, adult=adult,children=children)
         db.session.add(reserve)
         db.session.commit()
         transact = transaction(reference=reference,reservationId=reserve.id,userId=session.get("id"), amount=amount, status=1 )
         db.session.add(transact)
         db.session.commit()
+
 
         return redirect("/payment-success?ticket="+ticketId+"&reservation=true&uid="+reserve.id)
 

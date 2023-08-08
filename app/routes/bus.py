@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from pprint import pprint
 
 from flask import Blueprint, request, jsonify
@@ -45,24 +45,26 @@ def buses_search_api():
             message = 'Please add Adult passenger'
             status = False
         else:
-
-
-           # tickets = db.session.execute(db.select(ticket).where(ticket.availability_date >= dept_date , ticket.adult >= adult , ticket.children >= children)).scalars()
-           check_route = routes.query.filter_by(start_routeId=start_route, end_routeId=end_route).all()
+           check_route = routes.query.filter(routes.start_routeId==start_route, routes.end_routeId==end_route).all()
            tickets = []
-           check_date= ''
            for ro in check_route:
-               check_date =datetime.strptime(dept_date, '%d/%m/%Y').strftime('%Y-%m-%d')
-               tickets = ticket.query.filter(or_(ticket.availability_date>=check_date , ticket.routeId == ro.id)).all()
-
-           if tickets:
-            status = True
-            message = 'Search result found.'
-            data = tickets_schema.dump(tickets)
-
-           else:
-               status = False
-               message = 'No ticket found.'
+                check_date =datetime.strptime(dept_date, '%d/%m/%Y').strftime('%Y-%m-%d')
+                tickets = ticket.query.filter(or_(ticket.availability_date>=check_date , ticket.routeId == ro.id), ticket.status==1).all()
+                if tickets:
+                    for active in tickets:
+                        if active.availability_date < date.today():
+                            message='Ticket expired.'
+                            status = False
+                            active.status=0
+                            db.session.commit()
+                            continue
+                        else:
+                            status = True
+                            message = 'Search result found.'
+                            data = tickets_schema.dump(tickets)
+                else:
+                  status = False
+                  message = 'No ticket found.'
 
         return jsonify({
             'message': message,

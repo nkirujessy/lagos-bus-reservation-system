@@ -16,6 +16,7 @@
                         </div><!-- form-title-wrap -->
                         <div class="form-content contact-form-action">
                             <form method="post" id="editbus" class="row">
+                            <input value="{{ result.id }}" hidden name="id">
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
                                         <label class="label-text">Bus Number</label>
@@ -51,7 +52,7 @@
                                     <div class="input-box">
                                         <label class="label-text">Status</label>
                                         <div class="form-group select-contain w-100">
-                                            <select class="select-contain-select" name="driver">
+                                            <select class="select-contain-select" name="status">
                                                 <option value="" selected>Choose Status</option>
 
                                                     <option {% if result.status == 1 %} selected {% endif %} value="1">Active</option>

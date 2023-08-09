@@ -1,3 +1,4 @@
+from datetime import datetime
 import math
 import random
 
@@ -40,4 +41,14 @@ def generateOTP() :
    OTP += digits[math.floor(random.random() * 10)]
 
   return OTP
+
+def time_diff(start, end):
+
+   # start = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+   # end = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+   difference = end - start
+   seconds = difference.total_seconds()
+   minutes = seconds / 60
+   return seconds / (60 * 60)
+
 

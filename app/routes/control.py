@@ -11,6 +11,7 @@ from app.helpers.util import app_config
 
 from app.models.reservationmodel import reservation
 from app.models.routemodel import routes
+from app.models.settingsmodel import settings
 from app.models.usersmodel import users
 from app.models.ticketmodel import ticket
 from app.models.busmodel import bus
@@ -145,14 +146,12 @@ def control_reservation_search_result():
         return redirect('/')
     path = 'Reservation Search Result'
     active_route = request.path
-    r_details= ''
-    number = request.args.get("number")
-    if not "number" in request.args or number == '':
-       return redirect('/404')
-    else:
-      r_details = reservation.query.filter(reservation.reservation_number==number).join(users).join(ticket).first()
-      if not r_details:
-         return  redirect('/404')
+    if request.method == 'GET':
+        id = request.args.get("id")
+        r_details = reservation.query.filter(reservation.id==id).join(users).first()
+        if not r_details:
+         return redirect('/control/reservations/list')
+
     return render_template('dashboard/control/reservation/reservations-search-result.html', path=path, route=active_route, result=r_details)
 @control_app_route.route('/control/bus/stops')
 def control_bus_stops():
@@ -182,6 +181,78 @@ def control_bus_add():
     dr_list = users.query.filter(users.role=='driver').all()
     return render_template('dashboard/control/bus/bus-add.html', drivers_list=dr_list, path=path, route=active_route)
 
+@control_app_route.route('/control/bus/edit',methods=['GET','POST'])
+def control_bus_edit():
+ if not session.get('admin'):
+    return redirect('/admin/login')
+ if request.method == 'GET':
+     path = 'Edit Bus'
+     active_route = request.path
+     dr_list = users.query.filter(users.role=='driver').all()
+     id = request.args.get('id')
+     result = bus.query.filter(bus.id==id).first()
+     if not result:
+       return redirect('/control/bus/list')
+
+ return render_template('dashboard/control/bus/bus-edit.html', result=result, drivers_list=dr_list, path=path, route=active_route)
+@control_app_route.route('/control/bus/edit_process', methods=['POST','GET'])
+def control_bus_edit_process():
+    status = False
+    message = 'Error Occurred'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        occupancy = request.form['occupancy']
+        driver = request.form['driver']
+        stat = request.form['status']
+        desc = request.form['description']
+        adult = request.form['adult']
+        children = request.form['children']
+        stat = request.form['status']
+
+        if not name:
+            message = 'Bus name is required'
+            status= False
+        elif not occupancy:
+            message = 'Occupancy is required'
+            status = False
+        elif not driver:
+            message = 'Driver is required'
+            status = False
+        elif not adult:
+            message = 'Adult is required'
+            status = False
+        elif not children:
+            message = 'Children is required'
+            status = False
+        elif not desc:
+            message = 'Description is required'
+            status = False
+        elif not stat:
+            message = 'Status is required'
+            status = False
+
+
+        else:
+            data = bus.query.filter(bus.id==id).first()
+            data.name=name
+            data.driverId=driver
+            data.max_occupancy=occupancy
+            data.description=desc
+            data.adult=adult
+            data.children=children
+            data.status=stat
+
+            db.session.commit()
+            status = True
+            message = 'Bus updated.'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 @control_app_route.route('/control/bus/stop/add')
 def control_bus_stop_add():
     if not session.get('admin'):
@@ -190,6 +261,88 @@ def control_bus_stop_add():
     active_route = request.path
     r_list = routes.query.all()
     return render_template('dashboard/control/bus/bus-stop-add.html', routes_list=r_list, path=path, route=active_route)
+@control_app_route.route('/control/bus/stop/edit')
+def control_bus_stop_edit():
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    path = 'Edit Bus Stop'
+    active_route = request.path
+    r_list = routes.query.all()
+    if request.method == 'GET':
+     id = request.args.get('id')
+     result = busstop.query.filter(busstop.id==id).first()
+     if not result:
+        return redirect('/control/bus/list')
+
+    return render_template('dashboard/control/bus/bus-stop-edit.html', result=result, routes_list=r_list, path=path, route=active_route)
+@control_app_route.route('/control/bus/stop/edit_process', methods=['POST','GET'])
+def control_bus_stop_edit_process():
+    status = False
+    message = 'Error Occurred'
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['name']
+        route = request.form['route']
+        address = request.form['address']
+        landmark = request.form['landmark']
+        zip = request.form['zip']
+        stat = request.form['status']
+        desc = request.form['description']
+        long = request.form['longitude']
+        lat = request.form['latitude']
+        stat = request.form['status']
+
+        if not name:
+            message = 'Bus name is required'
+            status= False
+        elif not route:
+            message = 'Route is required'
+            status = False
+        elif not address:
+            message = 'Address is required'
+            status = False
+        elif not landmark:
+            message = 'Landmark is required'
+            status = False
+        elif not zip:
+            message = 'Zip is required'
+            status = False
+        elif not desc:
+            message = 'Description is required'
+            status = False
+        elif not stat:
+            message = 'Status is required'
+            status = False
+        elif not long:
+            message = 'Longitude is required'
+            status = False
+        elif not lat:
+            message = 'Latitude is required'
+            status = False
+
+
+        else:
+            data = busstop.query.filter(busstop.id==id).first()
+            data.name=name
+            data.routeId=route
+            data.address=address
+            data.description=desc
+            data.landmark=landmark
+            data.zipcode=zip
+            data.latitude=lat
+            data.longitude=long
+            data.status=stat
+
+            db.session.commit()
+            status = True
+            message = 'Bus Stop updated.'
+
+    return jsonify({
+        'message': message,
+        'status': status
+    })
 @control_app_route.route('/control/bus/stop/add_process', methods=['POST','GET'])
 def control_bus_stop_add_process():
     status = False
@@ -329,7 +482,8 @@ def control_ticket_details():
         return redirect('/admin/login')
     path = 'Edit Ticket'
     active_route = request.path
-    id = request.args.get('id')
+    if request.method == 'GET':
+     id = request.args.get('id')
     routes_list = routes.query.filter_by(status=1).all()
     bus_list = bus.query.filter_by(status=1).all()
     dr_list = users.query.filter(users.role=='driver').all()
@@ -620,13 +774,33 @@ def control_transactions():
     active_route = request.path
     t_list = transaction.query.all()
     return render_template('dashboard/control/transactions.html',transaction_list=t_list, path=path, route=active_route)
-@control_app_route.route('/control/settings')
+@control_app_route.route('/control/settings', methods=['POST','GET' ])
 def control_settings():
     if not session.get('admin'):
         return redirect('/admin/login')
     path = 'Settings'
     active_route = request.path
-    return render_template('dashboard/control/settings.html', path=path, route=active_route)
+    config = app_config()
+    if request.method == 'POST':
+        id = request.form['id']
+        name = request.form['appname']
+        curr = request.form['currency']
+        email = request.form['email']
+        password = request.form['password']
+        host = request.form['host']
+        port = request.form['port']
+        setting = settings.query.filter(settings.id==id).first()
+        setting.appname=name
+        setting.currency=curr
+        setting.email=email
+        setting.password=password
+        setting.host=host
+        setting.port=port
+        db.session.commit()
+        if setting:
+         return redirect('/control/settings')
+
+    return render_template('dashboard/control/settings.html', config=config,path=path, route=active_route)
 @control_app_route.route('/control/profile')
 def control_profile():
     if not session.get('admin') and not session.get('driver'):

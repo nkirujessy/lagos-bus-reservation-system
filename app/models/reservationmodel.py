@@ -22,6 +22,7 @@ class reservation(db.Model,SerializerMixin):
     reservation_number = db.Column(db.String(225), nullable=False)
     adult = db.Column(db.Integer, nullable=False)
     children = db.Column(db.Integer, nullable=False)
+    checkin=db.Column(db.Integer, nullable=True)
     transaction = db.relationship(transaction, backref='reservation', lazy=True)
     status = db.Column(db.Integer, nullable=False)
     created = db.Column(db.DateTime(timezone=True), server_default=func.now())

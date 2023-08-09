@@ -28,7 +28,6 @@
                                             <th scope="col">User Email</th>
                                             <th scope="col">Created On</th>
                                             <th scope="col">Status</th>
-                                            <th scope="col">Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -46,12 +45,7 @@
                                                 <td>{{ data.users.email }}</td>
                                                 <td>{{ data.created }}</td>
                                                 <td><span class="badge {% if data.status == 1 %}badge-success {% elif data.status == 2%} badge-warning {% else %} badge-danger {% endif %}text-white py-1 px-2">{% if data.status == 1 %}Success {% elif data.status == 2%} Pending {% else %} Failed {% endif %}</span></td>
-                                                <td>
-                                                    <div class="table-content">
-                                                        <a href="#" class="theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Edit"><i class="la la-pencil"></i></a>
-                                                        <a href="#" class="theme-btn theme-btn-small" data-toggle="tooltip" data-placement="top" title="Delete"><i class="la la-trash"></i></a>
-                                                    </div>
-                                                </td>
+
                                             </tr>
                                         {% endfor %}
                                         </tbody>

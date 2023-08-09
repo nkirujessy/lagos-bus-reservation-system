@@ -4,59 +4,124 @@
 {% block content %}
 
 
-
     <!-- ================================
-        START CARD AREA
-    ================================= -->
-    <section class="card-area section--padding">
+    START SCHEDULE AREA
+================================= -->
+    <section class="schedule-area section-padding">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="filter-wrap margin-bottom-30px">
-                        <div class="filter-top d-flex align-items-center justify-content-between pb-4">
-                            <div>
-                                <h3 class="title font-size-24">2292 Tours found</h3>
-                                <p class="font-size-14 line-height-20 pt-1">Book with confidence: No tour booking fees</p>
-                            </div>
-                        </div><!-- end filter-top -->
-                    </div><!-- end filter-wrap -->
-                </div><!-- end col-lg-12 -->
-            </div><!-- end row -->
-            <div class="row">
+                </div>
+                <!-- end col-lg-12 -->
                 <div class="col-lg-12">
-                    <div class="card-item card-item-list ">
-                        <div class="card-img">
-                            <a href="tour-details.html" class="d-block">
-                                <img src="images/img9.jpg" alt="Destination-img">
-                            </a>
-                            <div class="add-to-wishlist icon-element" data-toggle="tooltip" data-placement="top" title="Save for Later">
-                                <i class="la la-heart-o"></i>
+                    {% if result|length >0 %}
+                    <div class="routes">
+                        {% for data in result %}
+                        <div class="route-item">
+                            <div class="row align-items-center">
+                                <div class="col-lg-3">
+                                    <div class="route-inner-item media align-items-center">
+                                        <div class="route-icon mr-4 pl-3">
+                                            <i class="la la-bus la-4x text-color-9"></i>
+                                        </div>
+                                        <!-- end route-icon -->
+                                        <div class="media-body">
+                                            <div
+                                                    class="time-wrap font-size-18 font-weight-medium text-black"
+                                            >
+                                                <span class="departure-time">{{ data.departure_datetime }}</span>
+                                                <i class="la la-arrow-right mx-1 text-color"></i>
+                                                <span class="arrival-time">{{ data.arrival_datetime }}</span>
+                                            </div>
+                                            <div class="time-wrap font-size-13">
+                          <span class="travel-time">
+                            <i class="la la-clock"></i>
+                            <span>2:15</span>h
+                          </span>
+                                                <span class="travel-time">
+                            <i class="la la-map-marker"></i>
+                            <span>0</span>
+                          </span>
+                                            </div>
+                                        </div>
+                                        <!-- end media-body -->
+                                    </div>
+                                    <!-- end media -->
+                                </div>
+                                <!-- end col-lg-3 -->
+                                <div class="col-lg-2">
+                                    <div class="route-inner-item media">
+                                        <div class="media-body">
+                                            <div
+                                                    class="price-wrap font-size-18 font-weight-medium text-black"
+                                            >
+                                                <span class="value text-color">{{ data.fee }}</span>
+                                                <span class="currency text-gray font-weight-regular"
+                                                >{{ currency }}</span
+                                                >
+                                            </div>
+                                            <div class="number-of-pass-wrap font-size-13">
+                          <span class="number-of-pass">
+                            <i class="la la-user"></i>
+                            <span>1</span>
+                          </span>
+                                            </div>
+                                        </div>
+                                        <!-- end media-body -->
+                                    </div>
+                                    <!-- end media -->
+                                </div>
+                                <!-- end col-lg-2 -->
+                                <div class="col-lg-3">
+                                    <div class="route-inner-item media">
+                                        <div class="media-body">
+                                            <div class="features">
+                                                <i class="la la-wifi mr-1" title="Wi-fi"></i>
+                                                <i class="la la-television mr-1" title="TV"></i>
+                                                <i class="la la-air-freshener mr-1" title="AC"></i>
+                                            </div>
+                                        </div>
+                                        <!-- end media-body -->
+                                    </div>
+                                    <!-- end media -->
+                                </div>
+                                <!-- end col-lg-3 -->
+                                <div class="col-lg-2">
+                                    <div class="route-inner-item media eticket"></div>
+                                    <!-- end media -->
+                                </div>
+                                <!-- end col-lg-2 -->
+                                <div class="col-lg-2">
+                                    <div class="select-route-btn-box text-right">
+                                        <a
+                                                class="theme-btn theme-btn-small"
+                                                type="submit"
+                                                href="#"
+                                        >Search<i class="la la-arrow-right ml-1"></i
+                                        ></a>
+                                    </div>
+                                    <!-- end select-route-btn-box -->
+                                </div>
+                                <!-- end col-lg-2 -->
                             </div>
+                            <!-- end row -->
                         </div>
-                        <div class="card-body">
-                            <h3 class="card-title"><a href="tour-details.html">Empire State Building Admission</a></h3>
-                            <p class="card-meta">124 E Huron St, New york</p>
-                            <div class="card-rating">
-                                <span class="badge text-white">4.4/5</span>
-                                <span class="review__text">Average</span>
-                                <span class="rating__text">(30 Reviews)</span>
-                            </div>
-                            <div class="card-price d-flex align-items-center justify-content-between">
-                                <p>
-                                    <span class="price__from">From</span>
-                                    <span class="price__num">$124.00</span>
-                                </p>
-                                <span class="tour-hour"><i class="la la-clock-o mr-1"></i>Full day</span>
-                            </div>
-                        </div>
-                    </div><!-- end card-item -->
-                </div><!-- end col-lg-8 -->
-            </div><!-- end row -->
-        </div><!-- end container -->
-    </section><!-- end card-area -->
+                        {% endfor %}
+                        {% else %}
+                        <h4 class="text-center">No bus found.</h4>
+                    {% endif %}
+                    </div>
+                    <!-- end routes -->
+                </div>
+                <!-- end col-lg-12 -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
+    </section>
     <!-- ================================
-        END CARD AREA
-    ================================= -->
+    END SCHEDULE AREA
+================================= -->
 
 
 

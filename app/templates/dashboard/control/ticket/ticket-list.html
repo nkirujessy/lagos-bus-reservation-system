@@ -60,7 +60,7 @@
                                                 <td>{{ ticket.departure_datetime }}</td>
                                                 <td>{{ ticket.arrival_datetime }}</td>
                                                 <td>{{ ticket.created }}</td>
-                                                <td><span class="badge {% if ticket.status == 1 %}badge-success {% elif ticket.status == 2%} badge-warning {% else %} badge-danger {% endif %}text-white py-1 px-2">{% if ticket.status == 1 %}Active {% else %} Inactive {% endif %}</span></td>
+                                                <td><span class="badge {% if ticket.status == 1 %}badge-success {% elif ticket.status == 2%} badge-warning {% else %} badge-danger {% endif %}text-white py-1 px-2">{% if ticket.status == 1 %}Active  {% elif ticket.status == 2%}Capacity Limit {% else %} Inactive/Expired {% endif %}</span></td>
                                                 <td>
                                                     <div class="table-content d-flex justify-content-between">
                                                         <a  href="/control/ticket/edit?id={{ ticket.id }}" class="edit_ticket theme-btn theme-btn-small mr-2" data-toggle="tooltip"  data-placement="top" title="Edit"><i class="la la-pencil"></i></a>

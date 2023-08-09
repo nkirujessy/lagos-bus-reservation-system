@@ -21,7 +21,7 @@ from app import app
 # @app.route('/buses')
 # def buses():
 #     path = 'Buses'
-#     return render_template('web/buses.html', path=path)
+#     return render_template('web/busstop.html', path=path)
 #
 #
 # @app.route('/tickets')

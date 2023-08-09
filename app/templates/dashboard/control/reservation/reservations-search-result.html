@@ -6,7 +6,6 @@
 <!-- ================================
     START DASHBOARD AREA
 ================================= -->
-    {{ result.ticket.id }}
     <div class="dashboard-main-content">
         <div class="container-fluid">
             <div class="row">
@@ -28,7 +27,9 @@
                                 <div class="card-body">
                                     <div class="d-flex align-items-center">
                                         <h3 class="card-title">{{ result.ticket.routes.name }}</h3>
-                                        <span class="badge {% if result.status == 1%} badge-success {% elif result.status == 2%} badge-warning {% elif result.status == 3%} badge-danger {% else %} badge-danger {% endif %} text-white ml-2">{% if result.status == 1%} Approved {% elif result.status == 2%} Pending {% elif result.status == 3%} Expired {% else %}  Cancelled {% endif %}</span>
+                                        <span class="badge {% if result.status == 1%} badge-success {% elif result.status == 2%} badge-warning {% elif result.status == 3%} badge-danger {% else %} badge-danger {% endif %} text-white ml-2">{% if result.status == 1%} Approved {% elif result.status == 2%} Pending {% elif result.status == 3%} Cancelled {% elif result.status == 4%}Expired/Used{% else %}  Inactive {% endif %}</span>
+
+                                        <span class="badge {% if result.checkin == 1%} badge-success  {% else %} badge-danger {% endif %} text-white ml-2">{% if result.checkin == 1%} Checked in {% else %}  Not Checked in {% endif %}</span>
                                     </div>
                                     <ul class="list-items list-items-2 pt-2 pb-3">
                                         <li><span>Departure:</span>{{ result.ticket.departure_datetime }}</li>
@@ -39,8 +40,8 @@
                                     </ul>
                                 </div>
                                 <div class="action-btns">
-                                    <a href="#" class="theme-btn theme-btn-small mr-2"><i class="la la-check-circle mr-1"></i>Approve</a>
-                                    <a href="#" class="theme-btn theme-btn-small"><i class="la la-times mr-1"></i>Cancel</a>
+                                    <button  data-id="{{ result.id }}" class="checkin_reservation theme-btn theme-btn-small mr-2"><i class="la la-check-circle mr-1"></i>Checkin</button>
+                                    <button type="button" data-id="{{ result.id }}"  class="cancel_reservation theme-btn theme-btn-small"><i class="la la-times mr-1"></i>Cancel</button>
                                 </div>
                             </div><!-- end card-item -->
                         </div>

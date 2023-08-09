@@ -16,14 +16,15 @@
                         </div>
                         <div class="form-content">
                             <div class="contact-form-action">
-                                <form action="#">
+                                <form action="/control/settings" method="post">
+                                    <input value="{{ config.id }}" hidden name="id">
                                     <div class="row">
                                         <div class="col-lg-6 responsive-column">
                                             <div class="input-box">
                                                 <label class="label-text">App Name</label>
                                                 <div class="form-group">
                                                     <span class="la la-user form-icon"></span>
-                                                    <input class="form-control" type="text" value="{{ session.fullname }}">
+                                                    <input class="form-control" name="appname" type="text" value="{{ config.appname }}">
                                                 </div>
                                             </div>
                                         </div><!-- end col-lg-6 -->
@@ -31,42 +32,50 @@
                                             <div class="input-box">
                                                 <label class="label-text">App Currency</label>
                                                 <div class="form-group">
-                                                    <span class="la la-envelope form-icon"></span>
-                                                    <input class="form-control" type="text" value="{{ session.email }}">
+                                                    <span class="la la-money form-icon"></span>
+                                                    <input class="form-control" name="currency" type="text" value="{{ config.currency }}">
                                                 </div>
                                             </div>
                                         </div><!-- end col-lg-6 -->
-                                        <h4>Email SMTP</h4>
-                                        <div class="col-lg-4 responsive-column">
+                                        <div class="col-lg-3 responsive-column">
                                             <div class="input-box">
-                                                <label class="label-text">App Currency</label>
+                                                <label class="label-text">SMTP Email</label>
                                                 <div class="form-group">
                                                     <span class="la la-envelope form-icon"></span>
-                                                    <input class="form-control" type="text" value="{{ session.email }}">
+                                                    <input class="form-control" type="text" name="email" value="{{ config.email }}">
                                                 </div>
                                             </div>
                                         </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-4 responsive-column">
+                                        <div class="col-lg-3 responsive-column">
                                             <div class="input-box">
-                                                <label class="label-text">App Currency</label>
+                                                <label class="label-text">SMTP Password</label>
                                                 <div class="form-group">
-                                                    <span class="la la-envelope form-icon"></span>
-                                                    <input class="form-control" type="text" value="{{ session.email }}">
+                                                    <span class="la la-asterisk form-icon"></span>
+                                                    <input class="form-control" type="password" name="password"  value="{{ config.password }}">
                                                 </div>
                                             </div>
                                         </div><!-- end col-lg-6 -->
-                                        <div class="col-lg-4 responsive-column">
+                                        <div class="col-lg-3 responsive-column">
                                             <div class="input-box">
-                                                <label class="label-text">App Currency</label>
+                                                <label class="label-text">SMTP Host</label>
                                                 <div class="form-group">
-                                                    <span class="la la-envelope form-icon"></span>
-                                                    <input class="form-control" type="text" value="{{ session.email }}">
+                                                    <span class="la la-intercom form-icon"></span>
+                                                    <input class="form-control" type="text" name="host" value="{{ config.host }}">
+                                                </div>
+                                            </div>
+                                        </div><!-- end col-lg-6 -->
+                                        <div class="col-lg-3 responsive-column">
+                                            <div class="input-box">
+                                                <label class="label-text">SMTP Port</label>
+                                                <div class="form-group">
+                                                    <span class="la la-code form-icon"></span>
+                                                    <input class="form-control" type="text" name="port" value="{{ config.host }}">
                                                 </div>
                                             </div>
                                         </div><!-- end col-lg-6 -->
                                         <div class="col-lg-12">
                                             <div class="btn-box">
-                                                <button class="theme-btn" type="button">Save Changes</button>
+                                                <button  class="theme-btn" type="submit">Save Changes</button>
                                             </div>
                                         </div><!-- end col-lg-12 -->
                                     </div><!-- end row -->

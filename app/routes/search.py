@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request
 from sqlalchemy import and_, func
 
 from app import app, db
-from app.helpers.util import app_config
+from app.helpers.util import app_config, time_diff
 from app.models.busmodel import bus
 from app.models.locationmodel import location
 from app.models.reservationmodel import reservation
@@ -28,15 +28,16 @@ def buses_search():
         data = json.loads(response)
         currency = app_config().currency
 
-        app.logger.info(currency)
         for value in data:
             tickets = ticket.query.filter(ticket.id==value['id'], ticket.status==1).join(routes).filter(ticket.routeId==value['routeId']).join(bus).join(busstop).all()
             ticket_sum = db.session.query(func.sum(reservation.adult), func.sum(reservation.children)).filter(reservation.ticketId==value['id']).scalar()
+
             for res in tickets:
+             interval = time_diff(res.departure_datetime, res.arrival_datetime)
              if ticket_sum == res.bus.max_occupancy:
                 tickets =[]
-                res.status=2
+                res.status=3
                 db.session.commit()
 
 
-        return render_template('web/search.html', path=path,  response=tickets, departure=dept, adult=adult,children=children, currency=currency, total=ticket_sum)
+        return render_template('web/search.html', path=path,  response=tickets, departure=dept, adult=adult,children=children, currency=currency, interval=interval)

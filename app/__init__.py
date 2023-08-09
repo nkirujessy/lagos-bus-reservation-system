@@ -21,6 +21,7 @@ from app.routes.search import search_route
 from app.routes.userapp import user_app_route
 from app.routes.control import control_app_route
 from app.routes.reservation import reserve_route
+from app.routes.ticket import tickets_routes
 
 
 
@@ -31,6 +32,7 @@ app.register_blueprint(bus_route)
 app.register_blueprint(user_app_route)
 app.register_blueprint(control_app_route)
 app.register_blueprint(reserve_route)
+app.register_blueprint(tickets_routes)
 
 
 
@@ -39,8 +41,8 @@ app.register_blueprint(reserve_route)
 @app.route('/')
 def home():
     path = 'Home'
-
     return render_template('web/index.html', path=path)
+
 
 @app.errorhandler(404)
 def page_not_found(e):

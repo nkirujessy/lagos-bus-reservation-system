@@ -1,10 +1,11 @@
 from datetime import datetime, date
 from pprint import pprint
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from sqlalchemy import between, or_
 from marshmallow import Schema, fields
 from app import db, app
+from app.models.busmodel import bus
 
 from app.models.ticketmodel import ticket
 from app.models.routemodel import routes
@@ -73,4 +74,8 @@ def buses_search_api():
 
         })
 
-#
+@bus_route.route("/bus-stops", methods=['GET', 'POST'])
+def buses():
+    buses = bus.query.all()
+    path="Buses"
+    return render_template( "/web/busstop.html",result=buses, path=path)

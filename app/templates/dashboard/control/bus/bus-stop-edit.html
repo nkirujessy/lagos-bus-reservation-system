@@ -15,7 +15,8 @@
                             <h3 class="title"><i class="la la-bus mr-2 text-gray"></i>Bus Stop information</h3>
                         </div><!-- form-title-wrap -->
                         <div class="form-content contact-form-action">
-                            <form method="post" id="addbus_stop" class="row">
+                            <form method="post" id="editbus_stop" class="row">
+                            <input value="{{ result.id }}" hidden name="id">
                                 <div class="col-lg-6 responsive-column">
                                     <div class="input-box">
                                         <label class="label-text">Bus Stop Name</label>
@@ -64,7 +65,7 @@
                                         <label class="label-text">Zip code</label>
                                         <div class="form-group">
                                             <span class="la la-hashtag form-icon"></span>
-                                            <input class="form-control" value="{{ result.zip }}" type="tel" name="zip" placeholder="Enter Zip" >
+                                            <input class="form-control" value="{{ result.zipcode }}" type="tel" name="zip" placeholder="Enter Zip" >
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
@@ -87,6 +88,20 @@
                                         </div>
                                     </div>
                                 </div><!-- end col-lg-6 -->
+                                <div class="col-lg-12 responsive-column">
+                                    <div class="input-box">
+                                        <label class="label-text">Status</label>
+                                        <div class="form-group select-contain w-100">
+                                            <select class="select-contain-select" name="status">
+                                                <option value="" selected>Choose Status</option>
+
+                                                <option {% if result.status == 1 %} selected {% endif %} value="1">Active</option>
+                                                <option {% if result.status == 2 %} selected {% endif %} value="2">Inactive</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div><!-- end col-lg-12 -->
                                 <div class="col-lg-12">
                                     <div class="input-box">
                                         <label class="label-text mb-0 line-height-20">Bus Description</label>

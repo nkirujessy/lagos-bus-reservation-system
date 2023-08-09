@@ -360,6 +360,72 @@ if (window.location.pathname === `/control/bus/add`) {
     }
 
 }
+if (window.location.pathname === `/control/bus/edit`) {
+    try {
+
+        $(`#edit-bus-btn`).click(async function(e) {
+            const form = formSerialize("#editbus")
+            console.log(form)
+            const request = await $.ajax({
+                method: `POST`,
+                url: `/control/bus/edit_process`,
+                data: form,
+                dataType: `json`,
+                beforeSend: function () {
+                    $(`#edit-bus-btn`).addClass(`d-none`)
+                    $(`#edit-bus-spinner`).removeClass(`d-none`)
+                },
+                complete: function () {
+                    $(`#edit-bus-btn`).removeClass(`d-none`)
+                    $(`#edit-bus-spinner`).addClass(`d-none`)
+                }
+            })
+
+            if (request.status) {
+                toastr.success(request.message)
+                window.location.reload()
+            } else {
+                toastr.error(request.message)
+            }
+        })
+    }catch (error) {
+        toastr.error(error)
+    }
+
+}
+if (window.location.pathname === `/control/bus/stop/edit`) {
+    try {
+
+        $(`#edit-bus-btn`).click(async function(e) {
+            const form = formSerialize("#editbus_stop")
+            console.log(form)
+            const request = await $.ajax({
+                method: `POST`,
+                url: `/control/bus/stop/edit_process`,
+                data: form,
+                dataType: `json`,
+                beforeSend: function () {
+                    $(`#edit-bus-btn`).addClass(`d-none`)
+                    $(`#edit-bus-spinner`).removeClass(`d-none`)
+                },
+                complete: function () {
+                    $(`#edit-bus-btn`).removeClass(`d-none`)
+                    $(`#edit-bus-spinner`).addClass(`d-none`)
+                }
+            })
+
+            if (request.status) {
+                toastr.success(request.message)
+                window.location.reload()
+            } else {
+                toastr.error(request.message)
+            }
+        })
+    }catch (error) {
+        toastr.error(error)
+    }
+
+}
 if (window.location.pathname === `/control/bus/stop/add`) {
     try {
 
@@ -421,7 +487,7 @@ if (window.location.pathname === `/control/reservations/search` || window.locati
             if (request.status) {
                 toastr.success(request.message)
                 setTimeout(()=> {
-                    window.location.href = `/control/reservations/search/result?number=${request.data.reservation_number}&status=true`
+                    window.location.href = `/control/reservations/search/result?id=${request.data.id}&status=true`
                 },1000)
             } else {
                 toastr.error(request.message)
@@ -585,10 +651,41 @@ $(`.cancel_reservation`).click(async function(e){
         if (!request.status){
 
             toastr.error(request.message)
-            setTimeout(()=>{window.location.reload()}, 800)
 
         }else {
             toastr.success(request.message)
+            setTimeout(()=>{window.location.reload()}, 800)
+        }
+    }
+    catch (error){
+        toastr.error(error)
+    }
+
+
+})
+$(`.checkin_reservation`).click(async function(e){
+    e.preventDefault()
+    try {
+        const id = e.target.dataset.id
+        const request = await $.ajax({
+            method: `GET`,
+            url: `/reservation/checkin`,
+            data: {id:id },
+            dataType: `json`,
+            beforeSend: function () {
+               e.target.disabled = true
+            },
+            complete: function (){
+                e.target.disabled = false
+            }
+        })
+        if (!request.status){
+
+            toastr.error(request.message)
+
+        }else {
+            toastr.success(request.message)
+            setTimeout(()=>{window.location.reload()}, 800)
         }
     }
     catch (error){

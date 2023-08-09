@@ -1,13 +1,13 @@
 /*====== bus stop map 1 ========*/
 function busStopOne(selector) {
     const map = L.map(selector).setView([51.495, -0.09], 15);
-    let osmUrl = '../../../../%7bs%7d.tile.openstreetmap.org/%7bz%7d/%7bx%7d/%7by%7d.png';
+    let osmUrl = 'https://b.tile.openstreetmap.org/13/4409/2741.png';
     let osmLayer = new L.TileLayer(osmUrl, {
         maxZoom: 19,
         attribution: 'Map data © OpenStreetMap contributors'
     });
     map.addLayer(osmLayer);
-    
+
     function clickZoom(e) {
         map.setView(e.target.getLatLng(),15);
     }
@@ -35,7 +35,7 @@ function busStopOne(selector) {
             }
         }
     }
-    
+
     $(".bus-stop-overview .list-group-item").each(function() {
        $(this).on('click', function(){
         markerFunction($(this)[0].id);
@@ -50,7 +50,7 @@ busStopOne("bus-stop-map1");
 /*========== bus stop 2 ============*/
 function busStopTwo(selector) {
     let map = L.map(selector).setView([51.495, -0.09], 15);
-    let osmUrl = '../../../../%7bs%7d.tile.openstreetmap.org/%7bz%7d/%7bx%7d/%7by%7d.png';
+    let osmUrl = 'https://b.tile.openstreetmap.org/13/4409/2741.png';
     let osmLayer = new L.TileLayer(osmUrl, {
         maxZoom: 19,
         attribution: 'Map data © OpenStreetMap contributors'

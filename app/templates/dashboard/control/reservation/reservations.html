@@ -24,8 +24,9 @@
                                         <th scope="col">No</th>
                                         <th scope="col">Fullname</th>
                                         <th scope="col">Email</th>
-                                        <th scope="col">Reservation Number</th>
-                                        <th scope="col">Ticket Number</th>
+                                        <th scope="col">Number</th>
+                                        <th scope="col">Check in</th>
+                                        <th scope="col">Ticket</th>
                                         <th scope="col">Created On</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Action</th>
@@ -44,9 +45,10 @@
                                         </td>
                                         <td>{{ reservation.users.email }}</td>
                                         <td>{{ reservation.reservation_number }}</td>
+                                        <td>{% if reservation.checkin == 1 %}Yes {% else %} No {% endif %}</td>
                                         <td>{{ reservation.ticket.ticket_number }}</td>
                                         <td>{{ reservation.created }}</td>
-                                        <td><span class="badge {% if reservation.status == 1 %}badge-success {% elif reservation.status == 2%} badge-warning {% else %} badge-danger {% endif %} text-white py-1 px-2">{% if reservation.status == 1 %}Active {% elif reservation.status == 2%} Pending {% else %} Cancelled {% endif %}</span></td>
+                                        <td><span class="badge {% if reservation.status == 1 %}badge-success {% elif reservation.status == 2%} badge-warning {% else %} badge-danger {% endif %} text-white py-1 px-2">{% if reservation.status == 1 %}Active {% elif reservation.status == 2%} Pending{% elif reservation.status == 3%}Cancelled {% elif reservation.status == 4%}Expired/Used {% else %}Inactive {% endif %}</span></td>
                                         <td>
                                             <div class="table-content d-flex justify-content-between">
                                                 <button type="button" data-id="{{ reservation.id }}"  class="cancel_reservation btn theme-btn-small btn-danger mr-2" data-toggle="tooltip" data-placement="top" title="Cancel"><i class="la la-remove"></i></button>

@@ -73,7 +73,7 @@
                                         <a href="/tickets">Tickets</a>
                                     </li>
                                     <li>
-                                        <a href="/buses">Buses</a>
+                                        <a href="/bus-stops">Bus Stops</a>
                                     </li>
                                     <li>
                                         <a href="/routes">Routes</a>
@@ -83,7 +83,7 @@
                         </div>
                         <!-- end main-menu-content -->
                         <div class="nav-btn">
-                        {% if session.user %}
+                        {% if session.user and not session.admin and not session.driver %}
 
                             <a
                                     href="/app/overview"
@@ -92,6 +92,17 @@
                             >
                             <a
                                     href="/logout"
+                                    class="theme-btn theme-btn-small"
+                            >Logout</a
+                            >
+                            {% elif  session.driver or session.admin %}
+                            <a
+                                    href="/control/overview"
+                                    class="theme-btn theme-btn-small theme-btn-transparent mr-1"
+                            > {{ session.fullname }}</a
+                            >
+                            <a
+                                    href="/control/logout"
                                     class="theme-btn theme-btn-small"
                             >Logout</a
                             >

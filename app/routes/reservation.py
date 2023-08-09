@@ -17,89 +17,123 @@ from app.models.transactionmodel import transaction
 from app.models.usersmodel import users
 from app.routes.control import id_generator
 
-reserve_route = Blueprint('search_route', __name__,template_folder='templates')
+reserve_route = Blueprint('search_route', __name__, template_folder='templates')
+
 
 @reserve_route.route("/checkout", methods=["POST", "GET"])
 def checkout():
-    path= "Checkout"
+    path = "Checkout"
     if request.method == "GET":
         ticketId = request.args.get("ticket", None)
         adult = request.args.get("adult", None)
         children = request.args.get("children", None)
         busstop = request.args.get("children", None)
-        currency =  settings.query.first()
-        tickets = ticket.query.filter(ticket.id==ticketId).join(routes).join(bus).first()
-        if(not tickets):
+        currency = settings.query.first()
+        tickets = ticket.query.filter(ticket.id == ticketId).join(routes).join(bus).first()
+        if (not tickets):
             return redirect("/404")
 
-    return render_template("web/reserve.html", path=path, tickets=tickets,adult=adult,children=children, currency=currency.currency )
+    return render_template("web/reserve.html", path=path, tickets=tickets, adult=adult, children=children,
+                           currency=currency.currency)
+
 
 @reserve_route.route("/reserve", methods=["POST", "GET"])
 def reserve_bus():
     if not session.get("user"):
         return redirect("/checkout")
     if request.method == "GET" and "ticket" in request.args and "adult" in request.args and "children" in request.args and "departure" in request.args:
-     ticketId = request.args.get("ticket", None)
-     adult = request.args.get("adult", None)
-     children = request.args.get("children", None)
-     departure = request.args.get("departure", None)
-     reservation_number = id_generator()
-     reference = uuid.uuid4()
-     user = session.get("id")
-     tickets = ticket.query.filter(ticket.id==ticketId).join(routes).join(bus).first()
+        ticketId = request.args.get("ticket", None)
+        adult = request.args.get("adult", None)
+        children = request.args.get("children", None)
+        departure = request.args.get("departure", None)
+        reservation_number = id_generator()
+        reference = uuid.uuid4()
+        user = session.get("id")
+        tickets = ticket.query.filter(ticket.id == ticketId).join(routes).join(bus).first()
 
-     if(not tickets):
-        return redirect("/404")
-     else:
-        amount = (int(adult) + int(children)) * int(tickets.fee)
-        init_capacity=(int(adult) + int(children))
-        reserve= reservation(userId=user,ticketId=ticketId, reservation_number=reservation_number, status=1, adult=adult,children=children)
-        db.session.add(reserve)
-        db.session.commit()
-        transact = transaction(reference=reference,reservationId=reserve.id,userId=session.get("id"), amount=amount, status=1 )
-        db.session.add(transact)
-        db.session.commit()
+        if (not tickets):
+            return redirect("/404")
+        else:
+            amount = (int(adult) + int(children)) * int(tickets.fee)
+            init_capacity = (int(adult) + int(children))
+            reserve = reservation(userId=user, ticketId=ticketId, reservation_number=reservation_number, status=1,
+                                  adult=adult, children=children)
+            db.session.add(reserve)
+            db.session.commit()
+            transact = transaction(reference=reference, reservationId=reserve.id, userId=session.get("id"),
+                                   amount=amount, status=1)
+            db.session.add(transact)
+            db.session.commit()
 
-
-        return redirect("/payment-success?ticket="+ticketId+"&reservation=true&uid="+reserve.id)
+            return redirect("/payment-success?ticket=" + ticketId + "&reservation=true&uid=" + reserve.id)
 
 
 @reserve_route.route("/payment-success", methods=["POST", "GET"])
 def payment_success():
-    path= "Payment Successful"
+    path = "Payment Successful"
     if request.method == "GET" and "ticket" in request.args and "reservation" in request.args and "uid" in request.args:
-     ticketId = request.args.get("ticket", None)
-     status = request.args.get("reservation", None)
-     uid = request.args.get("uid", None)
-     currency = app_config().currency
-     tickets = ticket.query.filter(ticket.id==ticketId).first()
-     reservations = reservation.query.filter(reservation.id==uid).join(transaction).join(ticket).join(users).first()
-     if not tickets or not reservations:
-          redirect("/")
+        ticketId = request.args.get("ticket", None)
+        status = request.args.get("reservation", None)
+        uid = request.args.get("uid", None)
+        currency = app_config().currency
+        tickets = ticket.query.filter(ticket.id == ticketId).first()
+        reservations = reservation.query.filter(reservation.id == uid).join(transaction).join(ticket).join(
+            users).first()
+        if not tickets or not reservations:
+            redirect("/")
 
-     return render_template("web/payment-complete.html", path=path ,result=reservations, currency=currency)
+        return render_template("web/payment-complete.html", path=path, result=reservations, currency=currency)
+
 
 @reserve_route.route("/reservation/cancel", methods=["POST", "GET"])
 def cancel_reservation():
-    message ="Error Occurred"
+    message = "Error Occurred"
     status = False
-    if request.method == "GET"  and "uid" in request.args:
+    if request.method == "GET" and "uid" in request.args:
         uid = request.args.get("uid", None)
-        reservations = reservation.query.filter(reservation.id==uid).first()
-        if not  reservations:
-           status =False
-           message="Reservation not found"
-        elif reservations.status == 0:
-            status =False
-            message="Reservation already cancelled"
+        reservations = reservation.query.filter(reservation.id == uid).first()
+        if not reservations:
+            status = False
+            message = "Reservation not found"
+        elif reservations.checkin == 1:
+            status = False
+            message = "Reservation already checked in"
+        elif reservations.status == 3:
+            status = False
+            message = "Reservation already cancelled"
         else:
-            reservations.status =0
+            reservations.status = 3
             db.session.commit()
-            status =True
-            message="Reservation cancelled"
+            status = True
+            message = "Reservation cancelled"
 
     return jsonify({
         "message": message,
         "status": status
     })
 
+
+@reserve_route.route("/reservation/checkin", methods=["POST", "GET"])
+def checkin_reservation():
+    message = "Error Occurred"
+    status = False
+    if request.method == "GET" and "id" in request.args:
+        id = request.args.get("id", None)
+        reservations = reservation.query.filter(reservation.id == id).first()
+        if not reservations:
+            status = False
+            message = "Reservation not found"
+        elif reservations.checkin == 1:
+            status = False
+            message = "Reservation already checked in"
+        else:
+            reservations.checkin = 1
+            reservations.status = 3
+            db.session.commit()
+            status = True
+            message = "Reservation checked in"
+
+    return jsonify({
+        "message": message,
+        "status": status
+      })

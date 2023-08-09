@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import logging
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:''@127.0.0.1/lbrs'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://dbmasteruser:MYt^P(k=Gs<{&Ig4}+5(HeJN(2>(klH3@ls-f6568add3f7132d1601e1be774ab40d43c9f7b41.cyajtkjuuapd.eu-west-2.rds.amazonaws.com/lbrsdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_ECHO'] = True
 app.secret_key = '7e908ae6-8bb1-445f-9cb9-f003fda72397'

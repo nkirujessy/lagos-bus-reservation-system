@@ -14,7 +14,7 @@ def register():
     message = ''
     status = False
 
-    if request.method == 'POST' and 'name' in request.form and 'email' in request.form and 'password' in request.form and 'confirmpassword' in request.form:
+    if request.method == 'POST':
         fullname = request.form['name']
         email = request.form['email']
         password = request.form['password']
@@ -58,7 +58,7 @@ def register():
 def login():
     message = ''
     status = False
-    if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
+    if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
 

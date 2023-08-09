@@ -41,7 +41,7 @@ def checkout():
 def reserve_bus():
     if not session.get("user"):
         return redirect("/checkout")
-    if request.method == "GET" and "ticket" in request.args and "adult" in request.args and "children" in request.args and "departure" in request.args:
+    if request.method == "GET":
         ticketId = request.args.get("ticket", None)
         adult = request.args.get("adult", None)
         children = request.args.get("children", None)
@@ -71,7 +71,7 @@ def reserve_bus():
 @reserve_route.route("/payment-success", methods=["POST", "GET"])
 def payment_success():
     path = "Payment Successful"
-    if request.method == "GET" and "ticket" in request.args and "reservation" in request.args and "uid" in request.args:
+    if request.method == "GET":
         ticketId = request.args.get("ticket", None)
         status = request.args.get("reservation", None)
         uid = request.args.get("uid", None)
@@ -89,7 +89,7 @@ def payment_success():
 def cancel_reservation():
     message = "Error Occurred"
     status = False
-    if request.method == "GET" and "uid" in request.args:
+    if request.method == "GET":
         uid = request.args.get("uid", None)
         reservations = reservation.query.filter(reservation.id == uid).first()
         if not reservations:
@@ -117,7 +117,7 @@ def cancel_reservation():
 def checkin_reservation():
     message = "Error Occurred"
     status = False
-    if request.method == "GET" and "id" in request.args:
+    if request.method == "GET":
         id = request.args.get("id", None)
         reservations = reservation.query.filter(reservation.id == id).first()
         if not reservations:

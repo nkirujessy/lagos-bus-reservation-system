@@ -8,7 +8,6 @@ from app.models.usersmodel import users, db
 
 users_route = Blueprint('users_route', __name__, template_folder='templates')
 
-def test():
 
 
 
@@ -25,6 +24,7 @@ def register():
         hashed_password = generate_password_hash(password)
         status = 1
         role = ''
+
         if not 'role' in request.form:
             role = 'user'
         else:

@@ -11,6 +11,7 @@ from app.models.ticketmodel import ticket
 from app.models.routemodel import routes
 bus_route = Blueprint('bus_route', __name__,template_folder='templates')
 
+
 class ticketSchema(Schema):
     class Meta:
         fields = ('id','name',	'description','fee','routeId','busId', 'available','availability_date','arrival_datetime',	'departure_datetime','status','created'	)

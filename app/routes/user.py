@@ -8,6 +8,9 @@ from app.models.usersmodel import users, db
 
 users_route = Blueprint('users_route', __name__, template_folder='templates')
 
+def test():
+
+
 
 @users_route.route('/signup', methods=['GET', 'POST'])
 def register():
@@ -21,9 +24,12 @@ def register():
         cpassword = request.form['confirmpassword']
         hashed_password = generate_password_hash(password)
         status = 1
-        role = request.form['role']
-        if not role:
+        role = ''
+        if not request.form['role']:
             role = 'user'
+        else:
+            role = request.form['role']
+
         user = users.query.filter_by(email=email).all()
 
         if cpassword != password:

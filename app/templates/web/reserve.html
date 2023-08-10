@@ -7,7 +7,7 @@
 <section class="booking-area padding-top-100px padding-bottom-70px">
     <div class="container">
         <div class="row">
-            {% if session.user %}
+            {% if not session.admin or not session.driver %}
             <div class="col-lg-8">
                 <div class="form-box">
                     <div class="form-title-wrap">
@@ -107,7 +107,7 @@
                                 <ul class="list-items list-items-2 list-items-flush py-2">
                                     <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>Availability</span>{{ tickets.availability_date }}</li>
                                     <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>Departure Time</span>{{ tickets.departure_datetime }}</li>
-                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>Arrival Time</span>{{ tickets.arrival_datetim }}</li>
+                                    <li class="font-size-15"><span class="w-auto d-block mb-n1"><i class="la la-calendar mr-1 font-size-17"></i>Arrival Time</span>{{ tickets.arrival_datetime }}</li>
                                 </ul>
                                 <h3 class="card-title pb-3">Order Details</h3>
                                 <div class="section-block"></div>

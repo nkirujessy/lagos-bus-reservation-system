@@ -25,7 +25,7 @@ def register():
         hashed_password = generate_password_hash(password)
         status = 1
         role = ''
-        if not request.form['role']:
+        if not 'role' in request.form:
             role = 'user'
         else:
             role = request.form['role']

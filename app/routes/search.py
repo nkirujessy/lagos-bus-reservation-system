@@ -30,7 +30,7 @@ def buses_search():
         currency = app_config().currency
         interval=0
         for value in data:
-            tickets = ticket.query.filter(ticket.id==value['id'], ticket.status==1).join(routes).filter(ticket.routeId==value['routeId']).join(bus).join(busstop).all()
+            tickets = ticket.query.filter(ticket.id==value['id'], ticket.status==1).all()
             ticket_sum = db.session.query(func.sum(reservation.adult), func.sum(reservation.children)).filter(reservation.ticketId==value['id']).scalar()
 
             for res in tickets:

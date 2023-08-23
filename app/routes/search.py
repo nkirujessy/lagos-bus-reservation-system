@@ -16,7 +16,8 @@ from app.models.busstopmodel import busstop
 search_route = Blueprint('search_route', __name__,template_folder='templates')
 
 
-@app.route("/search")
+
+@app.route("/search", methods=['GET', 'POST'])
 def buses_search():
     path = 'Search Result'
     tickets = []

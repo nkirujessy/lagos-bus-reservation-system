@@ -12,3 +12,5 @@ ACTIVE=1
 CAPACITY LIMIT=2
 INACTIVE/EXPIRED=0
 }
+
+always add methods=[post,get] in function

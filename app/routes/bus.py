@@ -6,7 +6,7 @@ from sqlalchemy import between, or_
 from marshmallow import Schema, fields
 from app import db, app
 from app.models.busmodel import bus
-
+from app.models.busstopmodel import busstop
 from app.models.ticketmodel import ticket
 from app.models.routemodel import routes
 bus_route = Blueprint('bus_route', __name__,template_folder='templates')
@@ -77,6 +77,6 @@ def buses_search_api():
 
 @bus_route.route("/bus-stops", methods=['GET', 'POST'])
 def buses():
-    buses = bus.query.all()
+    buses  = busstop.query.join(routes).all()
     path="Buses"
     return render_template( "/web/busstop.html",result=buses, path=path)

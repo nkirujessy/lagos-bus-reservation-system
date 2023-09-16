@@ -13,57 +13,58 @@
             <div class="row">
                 <div class="col-lg-12">
                     {% if result|length >0 %}
-
+                    <div class="row padding-top-80px">
                         {% for data in result %}
                             <!-- end row -->
-                            <div class="row padding-top-80px">
 
-                                <!-- end col-lg-12 -->
-                                <div class="col-lg-6">
-                                    <div class="map-container">
-                                        <div id="bus-stop-map1" class="map"></div>
-                                    </div>
-                                    <!-- end map-container -->
+                        <div class="col-md-6">
+                            <!-- end col-lg-12 -->
+                            <div class="col-lg-6 d-none">
+                                <div class="map-container">
+                                    <div id="bus-stop-map{{ loop.index }}" class="map"></div>
                                 </div>
-                                <!-- end col-lg-6 -->
-                                <div class="col-lg-6">
-                                    <ul
-                                            class="list-group list-group-flush list--group bus-stop-overview padding-left-30px"
-                                    >
-                                        <li class="list-group-item mx-0 mb-1 active" id="marker_4">
-                                            <a
-                                                    href="javascript:void(0)"
-                                                    class="list-group-link d-flex align-items-center"
-                                            >
-                                                <i class="la la-map-marker mr-1 icon-marker font-size-24"></i>
-                                                Siena (Stazione FS)
-                                                <i class="la la-angle-down icon-arrow"></i>
-                                            </a>
-                                            <div class="bus-stop-overview-content">
-                                                <address class="bus-stop-overview-content__address">
-                                                    <span>Piazza Carlo Rosselli - stazione FS</span>
-                                                    <span>53100 Siena</span>
-                                                    <span>Italy</span>
-                                                </address>
-                                                <div
-                                                        class="bus-stop-shop-btn-box pb-4 d-flex flex-wrap align-items-center justify-content-between"
-                                                >
-                                                    <div class="bus-stop-overview__link mr-4">
-                                                        <span>For more information, please see</span>
-                                                        <a href="#">Bus schedule and bus stops in Siena</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <!-- end col-lg-6 -->
+                                <!-- end map-container -->
                             </div>
+                            <!-- end col-lg-6 -->
+                            <div class="col-lg-6">
+                                <ul
+                                        class="list-group list-group-flush list--group bus-stop-overview padding-left-30px"
+                                >
+
+                                    <li class="list-group-item mx-0 mb-1 active w-100">
+                                        <a
+                                                href="javascript:void(0)"
+                                                class="list-group-link d-flex align-items-center"
+                                        >
+                                            <i class="la la-map-marker mr-1 icon-marker font-size-24"></i>
+                                            {{ data.name }}
+                                            <i class="la la-angle-down icon-arrow"></i>
+                                        </a>
+                                        <div class="bus-stop-overview-content">
+                                            <address class="bus-stop-overview-content__address">
+                                                <span>Via {{ data.landmark }}</span>
+                                                <span>{{ data.address }}</span>
+                                                <span>{{ data.zipcode }}</span>
+                                            </address>
+                                            <div
+                                                    class="bus-stop-shop-btn-box pb-4 d-flex flex-wrap align-items-center justify-content-end"
+                                            >
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <!-- end col-lg-6 -->
+
                             <!-- end row -->
+                        </div>
+
 
                         {% endfor %}
+                    </div>
                     {% else %}
-                        <h4 class="text-center">No bus found.</h4>
+                        <h4 class="text-center">No bus stop found.</h4>
                     {% endif %}
                     </div><!-- end card-item -->
 

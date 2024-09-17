@@ -5,6 +5,7 @@
 
 
 
+
     <!-- ================================
         START CARD AREA
     ================================= -->
@@ -17,79 +18,21 @@
                                 <h3 class="card-title pb-4 font-weight-bold">
                                     Popular bus routes in Lagos
                                 </h3>
+                              {% if result|length > 0 %}
                                 <ul class="list-group list-group-flush list--group">
+                                    {% for route in result %}
                                     <li class="list-group-item">
                                         <a
                                                 href="#"
                                                 class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Dijon <i class="la la-angle-right"></i
+                                        >{{ route.start_route.name }} - {{ route.end_route.name }} <i class="la la-angle-right"></i
                                         ></a>
                                     </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Messina <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Kraków <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Cologne - Milan <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Basel/Weil am Rhein
-                                            <i class="la la-angle-right"></i
-                                            ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Cannes <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Lecce <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Bordeaux <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Vodice <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a
-                                                href="#"
-                                                class="list-group-link d-flex align-items-center justify-content-between"
-                                        >Milan - Sala Consilina <i class="la la-angle-right"></i
-                                        ></a>
-                                    </li>
+                                    {% endfor %}
                                 </ul>
+                                {% else %}
+                                <p class="text-center">No data found.</p>
+                                {% endif %}
                             </div>
                         </div>
                         <!-- end card-item -->

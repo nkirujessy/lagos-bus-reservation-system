@@ -306,6 +306,8 @@ $(`#search-bus`).click(async function(e){
             }
         })
         console.log(request)
+
+        // return false
         if (!request.status){
 
             toastr.error(request.message)

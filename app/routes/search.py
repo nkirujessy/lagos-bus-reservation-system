@@ -16,7 +16,8 @@ from app.models.busstopmodel import busstop
 search_route = Blueprint('search_route', __name__,template_folder='templates')
 
 
-@app.route("/search")
+
+@app.route("/search", methods=['GET', 'POST'])
 def buses_search():
     path = 'Search Result'
     tickets = []
@@ -27,9 +28,9 @@ def buses_search():
         response = request.args.get('response', None)
         data = json.loads(response)
         currency = app_config().currency
-
+        interval=0
         for value in data:
-            tickets = ticket.query.filter(ticket.id==value['id'], ticket.status==1).join(routes).filter(ticket.routeId==value['routeId']).join(bus).join(busstop).all()
+            tickets = ticket.query.filter(ticket.id==value['id'], ticket.status==1).all()
             ticket_sum = db.session.query(func.sum(reservation.adult), func.sum(reservation.children)).filter(reservation.ticketId==value['id']).scalar()
 
             for res in tickets:

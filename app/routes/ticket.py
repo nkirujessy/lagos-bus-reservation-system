@@ -3,6 +3,7 @@ from flask import render_template, Blueprint
 from app import app
 from app.helpers.util import app_config
 from app.models.ticketmodel import ticket
+from app.models.routemodel import routes
 
 tickets_routes = Blueprint('tickets_roues', __name__,template_folder='templates')
 
@@ -17,5 +18,5 @@ def tickets():
 @tickets_routes.route("/routes")
 def routess():
     path="Routes"
-    data = ticket.query.all()
+    data  = routes.query.all()
     return render_template("web/routes.html", path=path, result=data)
